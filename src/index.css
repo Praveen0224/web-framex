@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+    --color-glass-bg: var(--glass-bg);
+    --color-glass-border: var(--glass-border);
+
+    --color-accent-1: #667eea;
+    --color-accent-2: #764ba2;
+
+    --background-image-accent-gradient: linear-gradient(
+        135deg,
+        var(--color-accent-1),
+        var(--color-accent-2)
+    );
+
+    --font-primary: var(--font-outfit);
+}
+
+:root {
+    --background: #ffffff;
+    --foreground: #0a0a0f;
+    --glass-bg: rgba(0, 0, 0, 0.03);
+    --glass-border: rgba(0, 0, 0, 0.06);
+    --nav-bg: rgba(255, 255, 255, 0.8);
+    --card-bg: rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+    --background: #0a0a0f;
+    --foreground: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --nav-bg: rgba(0, 0, 0, 0.8);
+    --card-bg: rgba(255, 255, 255, 0.05);
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-primary);
+        background-color: var(--background);
+        color: var(--foreground);
+        overflow-x: hidden;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+}
+
+@layer components {
+    .glass {
+        background-color: var(--card-bg);
+        backdrop-filter: blur(64px);
+        border: 1px solid var(--glass-border);
+    }
+
+    .gradient-text {
+        background-image: var(--background-image-accent-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .gradient-btn {
+        background-image: var(--background-image-accent-gradient);
+        color: white;
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s ease;
+    }
+}
