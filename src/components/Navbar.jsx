@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { LayoutGrid, User, Mail, Sparkles } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 
 const Navbar = ({ onNavClick, setIsHovered }) => {
     const [isScrolled, setIsScrolled] = useState(false)
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [activeTab, setActiveTab] = useState('home')
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -13,121 +14,130 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
     }, [])
 
     const navLinks = [
-        { id: '01', name: 'SERVICES', section: 'services' },
-        { id: '02', name: 'PORTFOLIO', section: 'portfolio' },
-        { id: '03', name: 'ABOUT', section: 'about' },
-        { id: '04', name: 'CONTACT', section: 'contact' }
+        { id: '01', name: 'Services', section: 'services', icon: <LayoutGrid size={22} /> },
+        { id: '02', name: 'Portfolio', section: 'portfolio', icon: <Sparkles size={22} /> },
+        { id: '03', name: 'About', section: 'about', icon: <User size={22} /> },
+        { id: '04', name: 'Contact', section: 'contact', icon: <Mail size={22} /> }
     ]
 
     return (
-        <motion.nav
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            className={`fixed top-0 left-0 w-full z-[1000] flex items-center justify-between px-6 md:px-12 transition-all duration-500 ${isScrolled ? 'h-20 bg-[var(--nav-bg)] backdrop-blur-xl border-b border-[var(--glass-border)]' : 'h-28 bg-transparent'
+        <>
+            {/* TOP NAV */}
+            <motion.nav
+                initial={{ y: -40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                className={`fixed top-0 left-0 w-full z-[1000] flex items-center justify-between px-6 md:px-16 transition-all duration-500 ${
+                    isScrolled 
+                    ? 'h-24 bg-[var(--background)]/50 backdrop-blur-xl border-b border-white/10' 
+                    : 'h-32 bg-transparent'
                 }`}
-        >
-            {/* 1. BRANDING */}
-            <div
-                className="flex items-center gap-4 cursor-none"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                onClick={() => onNavClick('home')}
             >
-                {/* Changed the orange box to your logo image */}
-                <div className="w-45 h-45 flex items-center justify-center overflow-hidden">
-                    <img 
-                        src="/framexlogo.png" 
-                        alt="Logo" 
-                        className="w-full h-full object-contain"
-                    />
-                </div>
-                
-                
-            </div>
-
-            {/* 2. CENTERED NAV LINKS (Desktop) */}
-            <div className="hidden lg:flex items-center gap-2">
-                {navLinks.map((link) => (
-                    <motion.button
-                        key={link.name}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        onClick={() => onNavClick(link.section)}
-                        className="group relative px-6 py-2 overflow-hidden"
-                    >
-                        <div className="flex flex-col items-center">
-                            <span className="text-[10px] font-mono text-orange-500 mb-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {link.id}
-                            </span>
-                            <span className="text-[11px] font-black tracking-[0.2em] text-[var(--foreground)] opacity-50 group-hover:opacity-100 transition-colors">
-                                {link.name}
-                            </span>
-                        </div>
-                        {/* Hover Underline */}
-                        <motion.div className="absolute bottom-0 left-0 w-full h-[1px] bg-orange-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-                    </motion.button>
-                ))}
-            </div>
-
-            {/* 3. SYSTEM STATUS & ACTION */}
-            <div className="flex items-center gap-6">
-                <div className="hidden xl:flex flex-col text-right">
-                    <div className="text-[9px] font-mono text-[var(--foreground)] opacity-30 tracking-widest uppercase">Uptime</div>
-                    <div className="text-[10px] text-green-500 font-mono">99.98% OPS</div>
-                </div>
-
-                <ThemeToggle />
-
-                <button
+                {/* 🔥 LOGO (INCREASED SIZE) */}
+                <div 
+                    className="flex items-center cursor-pointer group"
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
-                    className="relative px-6 py-3 border border-[var(--glass-border)] text-[var(--foreground)] font-black text-[10px] tracking-widest uppercase hover:bg-[var(--foreground)] hover:text-[var(--background)] transition-all duration-300"
+                    onClick={() => {
+                        setActiveTab('home')
+                        onNavClick('home')
+                    }}
                 >
-                    LAUNCH_PROJ
-                </button>
+                    <div className="w-24 h-24 md:w-36 md:h-36 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
+                        <img 
+                            src="/framexlogo.png" 
+                            alt="Logo" 
+                            className="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
+                        />
+                    </div>
+                </div>
 
-                {/* Mobile Menu Trigger */}
-                <button
-                    className="lg:hidden w-10 h-10 bg-[var(--foreground)] opacity-5 flex flex-col items-center justify-center gap-1"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                    <span className="w-5 h-[1px] bg-[var(--foreground)]" />
-                    <span className="w-5 h-[1px] bg-orange-500" />
-                </button>
-            </div>
+                {/* DESKTOP MENU */}
+                <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2 bg-white/5 border border-white/10 px-10 py-4 rounded-full backdrop-blur-xl">
+                    {navLinks.map((link) => (
+                        <button
+                            key={link.name}
+                            onClick={() => {
+                                setActiveTab(link.section)
+                                onNavClick(link.section)
+                            }}
+                            className="relative text-[14px] font-semibold uppercase tracking-[0.18em] transition-all"
+                        >
+                            {/* Active Indicator */}
+                            {activeTab === link.section && (
+                                <motion.span
+                                    layoutId="activeTab"
+                                    className="absolute -bottom-2 left-0 w-full h-[2px] bg-orange-500"
+                                />
+                            )}
 
-            {/* 4. MOBILE DRAWER */}
-            <AnimatePresence>
-                {mobileMenuOpen && (
-                    <motion.div
-                        initial={{ x: '100%' }}
-                        animate={{ x: 0 }}
-                        exit={{ x: '100%' }}
-                        transition={{ type: "spring", damping: 30 }}
-                        className="fixed inset-0 bg-[var(--background)] z-[1001] p-10 flex flex-col"
+                            <span className={`transition-all ${
+                                activeTab === link.section
+                                ? 'text-orange-500 opacity-100'
+                                : 'text-[var(--foreground)] opacity-50 hover:opacity-100'
+                            }`}>
+                                {link.name}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+
+                {/* RIGHT SIDE */}
+                <div className="flex items-center gap-4 md:gap-6">
+                    <div className="hidden sm:block">
+                        <ThemeToggle />
+                    </div>
+
+                    <button
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        onClick={() => {
+                            setActiveTab('contact')
+                            onNavClick('contact')
+                        }}
+                        className="px-6 md:px-8 py-3 md:py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[12px] md:text-[14px] tracking-[0.15em] uppercase rounded-xl md:rounded-2xl shadow-[0_10px_25px_rgba(249,115,22,0.4)] active:scale-95 transition-all"
                     >
-                        <div className="flex justify-between items-center mb-20">
-                            <span className="text-[var(--foreground)] font-black">MENU</span>
-                            <button onClick={() => setMobileMenuOpen(false)} className="text-orange-500 font-mono">CLOSE_X</button>
-                        </div>
-                        <div className="flex flex-col gap-10">
-                            {navLinks.map(link => (
-                                <button
-                                    key={link.name}
-                                    className="text-left group"
-                                    onClick={() => { onNavClick(link.section); setMobileMenuOpen(false); }}
-                                >
-                                    <span className="text-orange-500 font-mono text-sm mr-4">{link.id}</span>
-                                    <span className="text-5xl font-black text-[var(--foreground)] group-hover:text-orange-500 transition-colors tracking-tighter">
-                                        {link.name}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.nav>
+                        BOOK A CALL
+                    </button>
+                </div>
+            </motion.nav>
+
+            {/* 🔥 MOBILE DOCK */}
+            <div className="lg:hidden fixed bottom-8 left-0 w-full z-[1001] flex justify-center px-6">
+                <motion.div 
+                    initial={{ y: 40, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="flex items-center justify-around w-full max-w-[420px] bg-white/10 backdrop-blur-2xl border border-white/10 p-3 rounded-[28px] shadow-2xl"
+                >
+                    {navLinks.map((link) => (
+                        <button
+                            key={link.id}
+                            onClick={() => {
+                                setActiveTab(link.section)
+                                onNavClick(link.section)
+                            }}
+                            className="relative flex items-center justify-center w-14 h-14"
+                        >
+                            <AnimatePresence>
+                                {activeTab === link.section && (
+                                    <motion.div 
+                                        layoutId="mobileActive"
+                                        className="absolute inset-0 bg-white dark:bg-zinc-800 rounded-xl"
+                                    />
+                                )}
+                            </AnimatePresence>
+
+                            <span className={`relative z-10 transition-all ${
+                                activeTab === link.section
+                                ? 'text-orange-500 scale-110'
+                                : 'opacity-40'
+                            }`}>
+                                {link.icon}
+                            </span>
+                        </button>
+                    ))}
+                </motion.div>
+            </div>
+        </>
     )
 }
 
