@@ -75,7 +75,10 @@ const About = () => {
                         </p>
                         
                         <div className="flex items-center gap-4">
-                            <button className="px-8 py-4 bg-gradient-to-r from-purple-400 to-pink-500 text-black font-bold rounded-full flex items-center gap-2 hover:bg-orange-400 transition-all active:scale-95 text-sm uppercase tracking-wider">
+                            <button 
+                                onClick={() => window.location.href = '#contact'}
+                                className="px-8 py-4 bg-gradient-to-r from-purple-400 to-pink-500 text-black font-bold rounded-full flex items-center gap-2 hover:bg-orange-400 transition-all active:scale-95 text-sm uppercase tracking-wider"
+                            >
                                 Start Project <ArrowUpRight size={18} />
                             </button>
                         </div>
@@ -201,7 +204,7 @@ const About = () => {
                             <div className="md:col-span-5 flex flex-col gap-4">
                                 {[
                                     { icon: <Rocket size={20}/>, label: "Apply Internship", desc: "Launch Your Career", color: "bg-orange-600" },
-                                    { icon: <Users size={20}/>, label: "Explore Mentorship", desc: "1-on-1 Sessions", color: "bg-purple-600" }
+                                    { icon: <Users size={20}/>, label: "Apply Mentorship", desc: "1-on-1 Sessions", color: "bg-purple-600" }
                                 ].map((cta) => (
                                     <Link 
                                         href={`/description?type=${cta.label.toLowerCase().includes('internship') ? 'internship' : 'mentorship'}`} 

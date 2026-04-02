@@ -87,6 +87,7 @@ const Footer = () => {
                         <motion.button 
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
+                            onClick={() => window.location.href = '#contact'}
                             className="group relative px-12 py-6 bg-white text-black font-black rounded-full overflow-hidden mb-24 flex items-center gap-4 uppercase text-[12px] tracking-widest"
                         >
                             <span className="relative z-10">Start a project</span>

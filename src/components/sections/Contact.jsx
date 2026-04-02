@@ -2,16 +2,9 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
-    Mail, Phone, Send, User, MessageSquare, Zap, MapPin, 
-    ArrowUpRight, Instagram, Twitter, Linkedin, Github, Star 
+    Mail, Phone,    Send, User, MessageSquare, Zap, MapPin, 
+    ArrowUpRight, Instagram, Twitter, Linkedin, Github 
 } from 'lucide-react'
-
-// 1. REVIEWS DATA
-const reviews = [
-    { name: "Adrian K.", role: "CTO, Neuralink", text: "The architecture is clean, fast, and futuristic. Exactly what we needed.", rating: 5 },
-    { name: "Sarah Chen", role: "Product Design", text: "Unbelievable attention to detail. The best UI kit I've used in years.", rating: 5 },
-    { name: "Marcus V.", role: "Founder, Helios", text: "Professional, reliable, and the code quality is top-tier. 10/10.", rating: 5 }
-];
 
 const ModernInput = ({ icon: Icon, label, children, isFocused, optional }) => (
     <div className="relative group mb-6 md:mb-8">
@@ -68,38 +61,6 @@ const Contact = () => {
 
             <div className="relative z-10 max-w-7xl mx-auto px-6">
                 
-                {/* 1. USER REVIEWS */}
-                <div className="mb-20 md:mb-32">
-                    <div className="flex items-center gap-4 mb-10 opacity-30">
-                        <div className="h-[1px] w-12 bg-white" />
-                        <span className="text-[10px] uppercase tracking-[0.5em] font-bold">Client Feedback</span>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-                        {reviews.map((rev, i) => (
-                            <motion.div 
-                                key={i}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="p-8 border border-white/5 bg-white/[0.02] rounded-3xl backdrop-blur-sm"
-                            >
-                                <div className="flex gap-1 mb-4 text-orange-500">
-                                    {[...Array(5)].map((_, index) => <Star key={index} size={10} fill="currentColor" />)}
-                                </div>
-                                <p className="text-sm md:text-base font-light text-white/70 italic mb-6 leading-relaxed">
-                                    "{rev.text}"
-                                </p>
-                                <div>
-                                    <h4 className="text-xs font-bold uppercase tracking-widest">{rev.name}</h4>
-                                    <p className="text-[9px] text-orange-500/60 uppercase tracking-widest">{rev.role}</p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 
                     {/* 2. LEFT SIDE: TYPOGRAPHY PITCH */}

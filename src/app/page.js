@@ -7,6 +7,7 @@ import About from '../components/sections/About';
 import Services from '../components/sections/Services';
 import Portfolio from '../components/sections/Projects';
 import Contact from '../components/sections/Contact';
+import Reviews from '../components/sections/Reviews';
 import Footer from '../components/Footer';
 
 export default function Page() {
@@ -15,6 +16,7 @@ export default function Page() {
         about: useRef(null),
         services: useRef(null),
         portfolio: useRef(null),
+        reviews: useRef(null),
         contact: useRef(null)
     });
 
@@ -57,6 +59,10 @@ export default function Page() {
 
             <section ref={sections.current.portfolio} id="portfolio" className="page-section">
                 <Portfolio />
+            </section>
+
+            <section ref={sections.current.reviews} id="reviews" className="page-section">
+                <Reviews />
             </section>
 
             <section ref={sections.current.contact} id="contact" className="page-section">

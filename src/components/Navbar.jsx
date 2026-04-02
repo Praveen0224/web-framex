@@ -143,3 +143,4 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
 }
 
 export default Navbar
+ 

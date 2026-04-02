@@ -66,7 +66,7 @@ const Home = () => {
                                     src="/framexlogo.png" 
                                     alt="Frame X Logo" 
                                     className="w-full h-auto drop-shadow-[0_0_50px_rgba(236,72,153,0.15)] brightness-110"
-                                />
+                                /> 
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -89,10 +89,16 @@ const Home = () => {
 
                     {/* ACTION BUTTONS */}
                     <div className="flex flex-row items-center justify-center gap-4">
-                        <button className="px-8 py-3 rounded-full bg-white text-black text-[9px] font-bold tracking-[0.2em] uppercase hover:bg-pink-500 hover:text-white transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95">
+                        <button 
+                            onClick={() => window.location.href = '#contact'}
+                            className="px-8 py-3 rounded-full bg-white text-black text-[9px] font-bold tracking-[0.2em] uppercase hover:bg-pink-500 hover:text-white transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
+                        >
                             Start Project
                         </button>
-                        <button className="px-8 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-white text-[9px] font-bold tracking-[0.2em] uppercase hover:bg-white/10 transition-all active:scale-95">
+                        <button 
+                            onClick={() => window.location.href = '#contact'}
+                            className="px-8 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-white text-[9px] font-bold tracking-[0.2em] uppercase hover:bg-white/10 transition-all active:scale-95"
+                        >
                             Our Work
                         </button>
                     </div>
@@ -123,20 +129,7 @@ const Home = () => {
                 </motion.div>
             </main>
 
-            {/* MINIMAL FOOTER */}
-            <footer className="relative z-10 w-full pb-8 flex justify-center items-center pointer-events-none">
-                <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.15 }}
-                    transition={{ delay: 1 }}
-                    className="flex gap-12 text-[8px] font-bold tracking-[0.8em] text-white uppercase"
-                >
-                    <span>React</span>
-                    <span>Next.js</span>
-                    <span>Framer</span>
-                    <span>Tailwind</span>
-                </motion.div>
-            </footer>
+           
 
             <div className="fixed inset-0 pointer-events-none opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-50" />
         </div>
