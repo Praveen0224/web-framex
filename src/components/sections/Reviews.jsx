@@ -29,7 +29,7 @@ const Reviews = () => {
                         Wall of <br /> 
                         <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent text-5xl">Trusted words</span> <br />
                     </h2>
-                    <p className="text-white/40 text-xs md:text-sm mt-1">Trusted by builders worldwide.</p>
+                    <p className="text-white/40 text-xs md:text-sm mt-1">Trusted by many happy clients</p>
                 </div>
 
                 <div className="relative">

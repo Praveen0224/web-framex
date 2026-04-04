@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 
 const About = () => {
-    const headingWords = ["High", "End", "Solutions."];
+    const headingWords = ["High", "End", "Solutions"];
 
     // Services for the horizontal scroll
     const services = [
@@ -70,7 +70,7 @@ const About = () => {
                                 initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                                 transition={{ duration: 1, delay: i * 0.1, ease: [0.2, 0, 0.2, 1] }}
-                                className={`inline-block text-6xl md:text-8xl lg:text-[10rem] font-light tracking-[-0.04em] leading-[0.9] mr-4 md:mr-8 
+                                className={`inline-block text-4xl md:text-6xl lg:text-[10rem] font-light tracking-[-0.04em] leading-[0.9] mr-4 md:mr-8 
                                     ${i === 2 ? 'text-white/20' : 'text-white'}`}
                             >
                                 {word}
@@ -88,7 +88,7 @@ const About = () => {
                             transition={{ delay: 0.8 }}
                         >
                             <p className="text-lg md:text-xl leading-relaxed font-light text-white/60 mb-8 max-w-xl">
-                                We bridge the gap between complex backend logic and fluid frontend experiences. From scalable SaaS architectures to immersive glassmorphic interfaces, we build the future of the web.
+We make complex backend systems easy to use by creating simple and smooth frontend experiences. From powerful web applications to modern, attractive designs, we help build better websites for everyone.
                             </p>
                             
                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
@@ -166,11 +166,11 @@ const About = () => {
                                 className="mb-12"
                             >
                                 <h2 className="text-4xl md:text-7xl font-light tracking-tighter leading-[1.1] mb-8">
-                                    "Plant Your Ideas. <br />
+                                    "Plant Your Ideas, <br />
                                     <span className="text-white/20">We Grow the Technology"</span>
                                 </h2>
                                 <p className="text-white/50 text-lg md:text-xl font-light max-w-2xl leading-relaxed">
-                                    Our mission is to empower visionaries. Whether you are a startup looking for a robust MVP or a developer seeking professional growth, we provide the technical foundation to make it happen. 
+Our mission is to support your ideas and help you grow. Whether you’re starting a new project or want to improve your skills, we provide the right guidance, mentorship, and courses to help you succeed.
                                 </p>
                             </motion.div>
 
@@ -182,9 +182,9 @@ const About = () => {
                                 className="grid grid-cols-3 gap-4 border-y border-white/5 py-10"
                             >
                                 {[
-                                    { val: "15+", label: "Projects Delivered" },
+                                    { val: "10+", label: "Projects Ongoing" },
                                     { val: "10+", label: "Happy Clients" },
-                                    { val: "50+", label: "Minds Mentored" }
+                                    { val: "20+", label: "Minds Mentored" }
                                 ].map((stat, i) => (
                                     <motion.div key={i} variants={itemVariants} className="text-center md:text-left">
                                         <h3 className="text-3xl md:text-5xl font-light text-orange-500 tracking-tighter">{stat.val}</h3>
@@ -247,8 +247,7 @@ const About = () => {
                                     <span className="text-white/20 ">Mentorship</span>
                                 </motion.h2>
                                 <motion.p variants={itemVariants} className="text-lg text-white/60 font-light leading-relaxed max-w-xl">
-                                    Engineering the next generation of digital architects. Master technical precision and bold designs alongside industry experts in a real-world production environment.
-                                </motion.p>
+We help you become a skilled tech professional. Learn technical skills and creative design with expert guidance through real-world projects.                                </motion.p>
                             </div>
 
                             <div className="md:col-span-5 flex flex-col gap-4">

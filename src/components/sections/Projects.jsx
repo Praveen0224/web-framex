@@ -6,25 +6,25 @@ import { Globe, Shield } from 'lucide-react';
 const projects = [
     { 
         id: '01', 
-        title: 'Neural Interface', 
-        brand: 'N', 
-        tagline: 'Deep Intelligence', 
+        title: 'Privielle ', 
+        brand: 'E', 
+        tagline: 'Ecommerce Website', 
         image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200',
         color: 'from-orange-600/80'
     },
     { 
         id: '02', 
-        title: 'Quantum System', 
-        brand: 'Q', 
-        tagline: 'DeFi Security', 
+        title: 'R3k Shots', 
+        brand: 'W', 
+        tagline: 'Studio Website', 
         image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200',
         color: 'from-blue-600/80'
     },
     { 
         id: '03', 
-        title: 'Spatial OS', 
-        brand: 'S', 
-        tagline: 'Mixed Reality', 
+        title: 'SMR Holidays', 
+        brand: 'T', 
+        tagline: 'Tourism Website', 
         image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?q=80&w=1200',
         color: 'from-zinc-800/80'
     },
@@ -51,7 +51,7 @@ const Portfolio = () => {
     const [isPaused, setIsPaused] = useState(false);
     const [windowWidth, setWindowWidth] = useState(0);
     // Updated Heading Words
-    const headingWords = ["Selected", "Works."];
+    const headingWords = ["Selected", "Works"];
 
     const duplicatedClients = [...clients, ...clients, ...clients];
 
@@ -191,13 +191,13 @@ const Portfolio = () => {
                         onClick={() => window.location.href = '#contact'}
                         className="px-10 md:px-14 py-4 md:py-5 border border-black/10 text-black text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] rounded-full transition-all duration-500"
                     >
-                        Start Build Sequence
+                        Book your project
                     </motion.button>
                 </div>
 
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col items-center justify-center mb-6">
-                        <span className="text-[8px] uppercase tracking-[0.5em] text-black font-bold">Trusted Partners</span>
+                        <span className="text-[8px] uppercase tracking-[0.5em] text-black font-bold">Trusted Clients</span>
                     </div>
                     <div className="relative flex overflow-hidden">
                          <div className="flex whitespace-nowrap animate-marquee-reverse">

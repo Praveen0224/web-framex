@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 const services = [
-  { id: "01", title: "Fullstack Development", desc: "Scalable architectures using modern logic and global cloud infrastructure." },
-  { id: "02", title: "Content Creation", desc: "Emotion-driven storytelling powered by AI and human research." },
-  { id: "03", title: "Experience Designing", desc: "Utilizing UI/UX best practices to optimize user engagement.", highlight: true },
-  { id: "04", title: "Digital Marketing", desc: "Distributed ad networks and resilient SEO ecosystems for global reach." },
-  { id: "05", title: "Expert Mentoring", desc: "Empowering developers through one-on-one professional coaching." }
+  { id: "01", title: "Fullstack Development", desc: "We build fast, secure, and scalable websites and applications." },
+  { id: "02", title: "Content Creation", desc: "We create engaging content that connects with people." },
+  { id: "03", title: "Experience Designing", desc: "We design simple and user-friendly interfaces for better user experience.", highlight: true },
+  { id: "04", title: "Digital Marketing", desc: "We help your business grow online through SEO and ads." },
+  { id: "05", title: "Expert Mentoring", desc: "We guide and support you with personal mentoring to improve your skills." }
 ];
 
 const Services = () => {
-  const headingWords = ["Our", "Expert", "Roadmap."];
+  const headingWords = ["Our", "Expert", "Services"];
   const [hoveredIndex, setHoveredIndex] = useState(2);
 
   return (
