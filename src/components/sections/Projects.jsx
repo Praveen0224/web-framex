@@ -197,13 +197,13 @@ const Portfolio = () => {
 
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col items-center justify-center mb-6">
-                        <span className="text-[8px] uppercase tracking-[0.5em] text-black/30 font-bold">Trusted Partners</span>
+                        <span className="text-[8px] uppercase tracking-[0.5em] text-black font-bold">Trusted Partners</span>
                     </div>
                     <div className="relative flex overflow-hidden">
                          <div className="flex whitespace-nowrap animate-marquee-reverse">
                             {duplicatedClients.map((client, index) => (
                                 <div key={index} className="flex items-center justify-center mx-4 md:mx-10">
-                                    <span className="text-xs md:text-lg font-bold tracking-tighter text-black/10 hover:text-black/40 transition-colors duration-500 uppercase">
+                                    <span className="text-xs md:text-lg font-bold tracking-tighter text-black/70 hover:text-black/40 transition-colors duration-500 uppercase">
                                         {client.logo}
                                     </span>
                                 </div>
