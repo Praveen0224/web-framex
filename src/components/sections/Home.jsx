@@ -26,12 +26,7 @@ const Home = () => {
     const logoMoveY = useTransform(mouseY, [-0.5, 0.5], [-12, 12]);
     const streakX = useTransform(mouseX, [-0.5, 0.5], [30, -30]);
 
-    const techFeatures = [
-        { id: '01', title: 'Creative Development', desc: 'Crafting high-end web experiences' },
-        { id: '02', title: 'Scalable Architecture', desc: 'Building robust tech foundations' },
-        { id: '03', title: 'UI/UX Innovation', desc: 'Psychology-driven design patterns' }
-    ];
-
+  
     return (
         <div className="relative min-h-screen w-full bg-[#020202] font-sans text-white overflow-hidden flex flex-col">
             
@@ -104,29 +99,7 @@ const Home = () => {
                     </div>
                 </motion.div>
 
-                {/* BENTO FEATURE STRIP - Reduced padding and top margin */}
-                <motion.div 
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7, duration: 0.6 }}
-                    className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 border-t border-white/5 pt-8 mt-12 md:mt-16"
-                >
-                    {techFeatures.map((item) => (
-                        <div key={item.id} className="group flex flex-col items-center md:items-start text-center md:text-left">
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="text-pink-500 font-mono text-[9px] font-bold px-1.5 py-0.5 bg-pink-500/10 rounded">
-                                    {item.id}
-                                </span>
-                                <h3 className="text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 group-hover:text-pink-400 transition-colors">
-                                    {item.title}
-                                </h3>
-                            </div>
-                            <p className="text-[11px] text-white/20 leading-relaxed group-hover:text-white/40 transition-colors max-w-[200px]">
-                                {item.desc}
-                            </p>
-                        </div>
-                    ))}
-                </motion.div>
+                
             </main>
 
            

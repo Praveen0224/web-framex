@@ -3,20 +3,20 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
     ArrowUpRight, Code2, GraduationCap, ChevronDown, Rocket, 
-    Users, Cpu, Globe, Layout, Palette, PenTool, Lightbulb 
+    Users, Globe, Layout, Palette, PenTool, Lightbulb 
 } from 'lucide-react';
 
 const About = () => {
     const headingWords = ["High", "End", "Solutions"];
 
-    // Services for the horizontal scroll
+    // Services with Image Paths
     const services = [
-        { title: "UI/UX Design", icon: <Layout size={24} />, color: "from-blue-500/20" },
-        { title: "Web Dev", icon: <Code2 size={24} />, color: "from-orange-500/20" },
-        { title: "Poster Design", icon: <Palette size={24} />, color: "from-purple-500/20" },
-        { title: "Content", icon: <PenTool size={24} />, color: "from-green-500/20" },
-        { title: "Mentoring", icon: <Users size={24} />, color: "from-pink-500/20" },
-        { title: "Projects", icon: <Lightbulb size={24} />, color: "from-yellow-500/20" },
+        { title: "UI/UX Design", image: "/serv/uiux.jpg", color: "from-blue-500/20" },
+        { title: "Web Dev", image: "/serv/webdev.jpg", color: "from-orange-500/20" },
+        { title: "Poster Design", image: "/serv/poster.jpg", color: "from-purple-500/20" },
+        { title: "Content", image: "/serv/content.jpg", color: "from-green-500/20" },
+        { title: "Mentoring", image: "/serv/mentoring.jpg", color: "from-pink-500/20" },
+        { title: "Projects", image: "/serv/projects.jpg", color: "from-yellow-500/20" },
     ];
 
     const containerVariants = {
@@ -71,24 +71,21 @@ const About = () => {
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                                 transition={{ duration: 1, delay: i * 0.1, ease: [0.2, 0, 0.2, 1] }}
                                 className={`inline-block text-4xl md:text-6xl lg:text-[10rem] font-light tracking-[-0.04em] leading-[0.9] mr-4 md:mr-8 
-                                    ${i === 2 ? 'text-white/20' : 'text-white'}`}
+                                    ${i === 2 ? 'bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent' : 'text-white'}`}
                             >
                                 {word}
                             </motion.span>
                         ))}
                     </div>
 
-                    {/* UPDATED LAYOUT: ABOUT PARA (LEFT) & IMAGE SCROLLER (RIGHT) */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        
-                        {/* LEFT SIDE: ABOUT CONTENT */}
                         <motion.div 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.8 }}
                         >
                             <p className="text-lg md:text-xl leading-relaxed font-light text-white/60 mb-8 max-w-xl">
-We make complex backend systems easy to use by creating simple and smooth frontend experiences. From powerful web applications to modern, attractive designs, we help build better websites for everyone.
+                                We make complex backend systems easy to use by creating simple and smooth frontend experiences. From powerful web applications to modern, attractive designs, we help build better websites for everyone.
                             </p>
                             
                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
@@ -106,7 +103,7 @@ We make complex backend systems easy to use by creating simple and smooth fronte
                             </div>
                         </motion.div>
 
-                        {/* RIGHT SIDE: HORIZONTAL IMAGE/CARD SCROLLER */}
+                        {/* UPDATED: IMAGE SCROLLER */}
                         <div className="relative overflow-hidden py-4 mask-fade-edges">
                             <motion.div 
                                 animate={{ x: [0, -1200] }} 
@@ -116,18 +113,25 @@ We make complex backend systems easy to use by creating simple and smooth fronte
                                 {[...services, ...services].map((s, i) => (
                                     <div 
                                         key={i} 
-                                        className={`w-48 h-64 md:w-56 md:h-72 flex flex-col justify-end p-6 rounded-[2rem] bg-gradient-to-b ${s.color} to-white/[0.02] border border-white/10 backdrop-blur-sm group hover:border-orange-500/40 transition-all`}
+                                        className={`w-48 h-64 md:w-56 md:h-72 flex flex-col overflow-hidden rounded-[2rem] bg-gradient-to-b ${s.color} to-white/[0.02] border border-white/10 backdrop-blur-sm group hover:border-orange-500/40 transition-all`}
                                     >
-                                        <div className="mb-auto p-3 w-fit rounded-2xl bg-black/40 text-orange-500">
-                                            {s.icon}
+                                        {/* Image Section */}
+                                        <div className="h-2/3 w-full overflow-hidden">
+                                            <img 
+                                                src={s.image} 
+                                                alt={s.title} 
+                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 opacity-60 group-hover:opacity-100"
+                                            />
                                         </div>
-                                        <h4 className="text-sm font-semibold tracking-wider uppercase opacity-80">{s.title}</h4>
-                                        <div className="h-1 w-8 bg-orange-500 mt-2 group-hover:w-full transition-all duration-500" />
+                                        {/* Text Section */}
+                                        <div className="h-1/3 p-6 flex flex-col justify-center">
+                                            <h4 className="text-xs font-semibold tracking-wider uppercase opacity-80">{s.title}</h4>
+                                            <div className="h-1 w-8 bg-orange-500 mt-2 group-hover:w-full transition-all duration-500" />
+                                        </div>
                                     </div>
                                 ))}
                             </motion.div>
                             
-                            {/* Gradient overlays for smooth fading at edges */}
                             <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#050505] to-transparent z-10" />
                             <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#050505] to-transparent z-10" />
                         </div>
@@ -145,7 +149,7 @@ We make complex backend systems easy to use by creating simple and smooth fronte
                 </motion.div>
             </section>
 
-            {/* 2. UNIFIED CONTENT SECTION (Stat and others remain same) */}
+            {/* 2. UNIFIED CONTENT SECTION */}
             <section className="py-20 px-6 lg:px-20 border-t border-white/5 bg-[#080808]/50 backdrop-blur-sm relative">
                 <div 
                     className="absolute inset-0 opacity-[0.05] pointer-events-none" 
@@ -170,7 +174,7 @@ We make complex backend systems easy to use by creating simple and smooth fronte
                                     <span className="text-white/20">We Grow the Technology"</span>
                                 </h2>
                                 <p className="text-white/50 text-lg md:text-xl font-light max-w-2xl leading-relaxed">
-Our mission is to support your ideas and help you grow. Whether you’re starting a new project or want to improve your skills, we provide the right guidance, mentorship, and courses to help you succeed.
+                                    Our mission is to support your ideas and help you grow. Whether you’re starting a new project or want to improve your skills, we provide the right guidance, mentorship, and courses to help you succeed.
                                 </p>
                             </motion.div>
 
@@ -229,7 +233,6 @@ Our mission is to support your ideas and help you grow. Whether you’re startin
                         </motion.div>
                     </div>
 
-                    {/* POSTER SECTION remains same as requested */}
                     <motion.section 
                         initial="hidden"
                         whileInView="visible"
@@ -247,7 +250,8 @@ Our mission is to support your ideas and help you grow. Whether you’re startin
                                     <span className="text-white/20 ">Mentorship</span>
                                 </motion.h2>
                                 <motion.p variants={itemVariants} className="text-lg text-white/60 font-light leading-relaxed max-w-xl">
-We help you become a skilled tech professional. Learn technical skills and creative design with expert guidance through real-world projects.                                </motion.p>
+                                    We help you become a skilled tech professional. Learn technical skills and creative design with expert guidance through real-world projects.
+                                </motion.p>
                             </div>
 
                             <div className="md:col-span-5 flex flex-col gap-4">

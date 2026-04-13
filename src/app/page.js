@@ -10,6 +10,7 @@ import Contact from '../components/sections/Contact';
 import Reviews from '../components/sections/Reviews';
 import Footer from '../components/Footer';
 
+
 export default function Page() {
     const sections = useRef({
         home: useRef(null),

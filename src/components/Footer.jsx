@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Facebook, Linkedin, ArrowUpRight, Zap, Send } from 'lucide-react';
+import { Instagram, Linkedin, ArrowUpRight, Zap, Send } from 'lucide-react';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -36,7 +36,7 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="relative bg-[#050505] text-white pt-32 pb-12 overflow-hidden font-sans border-t border-white/5">
+        <footer className="relative bg-[#050505] text-white pt-16 pb-8 overflow-hidden font-sans border-t border-white/5">
             
             {/* --- BACKGROUND AMBIENCE --- */}
             <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-orange-600/10 blur-[150px] rounded-full pointer-events-none" />
@@ -45,7 +45,7 @@ const Footer = () => {
     
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 
-                <div className="flex flex-col lg:flex-row justify-between items-start mb-32 gap-20">
+                <div className="flex flex-col lg:flex-row justify-between items-start mb-16 gap-10">
                     
                     {/* LEFT SECTION */}
                     <div className="lg:max-w-2xl">
@@ -62,22 +62,26 @@ const Footer = () => {
                         <h2 className="text-6xl md:text-8xl font-light tracking-tighter mb-12 leading-[0.85] uppercase">
                             Let's build <br /> 
                             <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent font-medium">the future</span> <br />
-                            together.
+                            together
                         </h2>
-                        
-                        {/* SOCIALS */}
-                        <div className="flex gap-5">
-                            {[Linkedin, Facebook, Instagram].map((Icon, index) => (
-                                <motion.a 
-                                    key={index}
-                                    href="#" 
-                                    whileHover={{ y: -5, scale: 1.1 }}
-                                    className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white/40 transition-all duration-500 hover:border-orange-500/50 hover:bg-orange-500/5 hover:text-white group"
-                                >
-                                    <Icon size={22} className="group-hover:rotate-[360deg] transition-transform duration-700" />
-                                </motion.a>
-                            ))}
-                        </div>
+                     {/* SOCIALS */}
+<div className="flex gap-5">
+    {[
+        { Icon: Linkedin, url: "https://www.linkedin.com/in/framex-tech-farm-453b513b6/" }, // Unga LinkedIn URL inga kudunga
+        { Icon: Instagram, url: "https://www.instagram.com/framex_techfarm/" }    // Unga Instagram URL inga kudunga
+    ].map((social, index) => (
+        <motion.a 
+            key={index}
+            href={social.url} 
+            target="_blank"           // Puthiya tab-la open aaga
+            rel="noopener noreferrer" // Security purpose-kaga
+            whileHover={{ y: -5, scale: 1.1 }}
+            className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white/40 transition-all duration-500 hover:border-orange-500/50 hover:bg-orange-500/5 hover:text-white group"
+        >
+            <social.Icon size={22} className="group-hover:rotate-[360deg] transition-transform duration-700" />
+        </motion.a>
+    ))}
+</div>
                     </div>
 
                     {/* RIGHT SECTION */}
@@ -88,7 +92,7 @@ const Footer = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => window.location.href = '#contact'}
-                            className="group relative px-12 py-6 bg-white text-black font-black rounded-full overflow-hidden mb-24 flex items-center gap-4 uppercase text-[12px] tracking-widest"
+                            className="group relative px-12 py-4 bg-white text-black font-black rounded-full overflow-hidden mb-24 flex items-center gap-4 uppercase text-[12px] tracking-widest"
                         >
                             <span className="relative z-10">Start a project</span>
                             <ArrowUpRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -106,7 +110,7 @@ const Footer = () => {
                                     <ul className="space-y-4">
                                         {section.links.map((link) => (
                                             <li key={link.name}>
-                                                <a href={link.href} className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px] font-bold tracking-widest uppercase flex items-center gap-2 group">
+                                                <a href={link.href} className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px]  tracking-widest  flex items-center gap-2 group">
                                                     <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all underline-offset-4" />
                                                     {link.name}
                                                 </a>
@@ -120,23 +124,20 @@ const Footer = () => {
                 </div>
 
                 {/* BOTTOM BAR */}
-                <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5">
-                    <div className="flex flex-col md:flex-row items-center gap-8">
-                        <p className="text-[11px] font tracking-[0.4em] text-white/20  ">
-                            © {currentYear} FrameX-Tech Farm 
+                <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5">
+                    <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                        <p className="text-[11px] font tracking-[0.2em] text-white/20">
+                            © {currentYear} FrameX-Tech Farm. All rights reserved.
                         </p>
                         <div className="h-1 w-1 bg-white/20 rounded-full hidden md:block" />
-                        <p className="text-[11px] font tracking-[0.4em] text-white/20 ">
-                            Crafted in the Digital Ether
-                        </p>
+                        <div className="flex items-center gap-4 text-[11px] font tracking-[0.2em] text-white/40">
+                            <a href="/terms" className="hover:text-amber-500 transition-colors uppercase">Terms & Conditions</a>
+                            <div className="h-1 w-1 bg-white/20 rounded-full" />
+                            <a href="/privacy" className="hover:text-amber-500 transition-colors uppercase">Privacy Policy</a>
+                        </div>
                     </div>
                     
-                    <div className="px-4 py-2 bg-white/[0.03] border border-white/5 rounded-full backdrop-blur-md">
-                         <p className="text-[11px] font-black tracking-[0.4em] text-white/40  flex items-center gap-3">
-                            <span className="w-2 h-2 bg-orange-500 rounded-full animate-ping" />
-                            System_Status: <span className="text-white">Operational</span>
-                        </p>
-                    </div>
+                  
                 </div>
             </div>
         </footer>

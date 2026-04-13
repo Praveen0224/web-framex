@@ -36,7 +36,7 @@ const Services = () => {
               transition={{ duration: 1, delay: i * 0.1, ease: [0.2, 0, 0.2, 1] }}
               viewport={{ once: true }}
               className={`inline-block text-5xl md:text-8xl lg:text-9xl font-light tracking-[-0.04em] leading-[0.9] mr-4 md:mr-8 
-                ${i === 2 ? 'text-white/20' : 'text-white'}`}
+                ${i === 2 ? 'bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent' : 'text-white'}`}
             >
               {word}
             </motion.span>

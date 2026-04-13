@@ -1,11 +1,15 @@
+'use client';
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutGrid, User, Mail, Sparkles } from 'lucide-react'
+import { LayoutGrid, User, Mail, Sparkles, Briefcase, ChevronDown } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 
 const Navbar = ({ onNavClick, setIsHovered }) => {
+    const router = useRouter()
     const [isScrolled, setIsScrolled] = useState(false)
     const [activeTab, setActiveTab] = useState('home')
+    const [showCareers, setShowCareers] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -20,6 +24,8 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
         { id: '04', name: 'Contact', section: 'contact', icon: <Mail size={20} /> }
     ]
 
+    const careerOptions = ['Job', 'Internship', 'Mentorship']
+
     return (
         <>
             {/* TOP NAV */}
@@ -32,7 +38,7 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                     : 'h-24 bg-transparent'
                 }`}
             >
-                {/* LOGO - Optimized size */}
+                {/* LOGO */}
                 <div 
                     className="flex items-center cursor-pointer group"
                     onMouseEnter={() => setIsHovered(true)}
@@ -51,8 +57,8 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                     </div>
                 </div>
 
-                {/* DESKTOP MENU - Compact padding & font */}
-                <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 bg-white/5 border border-white/10 px-8 py-3 rounded-full backdrop-blur-2xl shadow-inner">
+                {/* DESKTOP MENU */}
+                <div className="hidden lg:flex items-center gap-6 absolute left-1/2 -translate-x-1/2 bg-white/5 border border-white/10 px-6 py-2.5 rounded-full backdrop-blur-2xl shadow-inner">
                     {navLinks.map((link) => (
                         <button
                             key={link.name}
@@ -60,7 +66,7 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                                 setActiveTab(link.section)
                                 onNavClick(link.section)
                             }}
-                            className="relative text-[12px] font-bold uppercase tracking-[0.15em] transition-all"
+                            className="relative text-[11px] font-medium uppercase tracking-[0.12em] transition-all"
                         >
                             {activeTab === link.section && (
                                 <motion.span
@@ -69,19 +75,48 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                 />
                             )}
-
                             <span className={`transition-all duration-300 ${
-                                activeTab === link.section
-                                ? 'text-orange-500 opacity-100'
-                                : 'text-[var(--foreground)] opacity-40 hover:opacity-100'
+                                activeTab === link.section ? 'text-orange-500' : 'text-[var(--foreground)] opacity-50 hover:opacity-100'
                             }`}>
                                 {link.name}
                             </span>
                         </button>
                     ))}
+
+                    {/* CAREERS DROPDOWN */}
+                    <div 
+                        className="relative group"
+                        onMouseEnter={() => setShowCareers(true)}
+                        onMouseLeave={() => setShowCareers(false)}
+                    >
+                        <button className="flex items-center gap-1 text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--foreground)] opacity-50 group-hover:opacity-100 transition-all">
+                            Careers <ChevronDown size={14} className={`transition-transform duration-300 ${showCareers ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence>
+                            {showCareers && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    className="absolute top-full left-0 mt-4 w-40 bg-[var(--background)]/90 backdrop-blur-2xl border border-white/10 rounded-xl overflow-hidden shadow-xl"
+                                >
+                                    {careerOptions.map((opt) => (
+                                        <button 
+                                            key={opt}
+                                            onClick={() => router.push(`/careers?filter=${opt.toLowerCase()}`)}
+                                            className="w-full text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[var(--foreground)] opacity-70 hover:opacity-100 hover:bg-white/5 transition-all"
+                                        >
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
 
-                {/* RIGHT SIDE - Sleek Button */}
+                {/* RIGHT SIDE */}
                 <div className="flex items-center gap-4">
                     <div className="hidden sm:block scale-90">
                         <ThemeToggle />
@@ -94,19 +129,19 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                             setActiveTab('contact')
                             onNavClick('contact')
                         }}
-                        className="px-5 md:px-6 py-2.5 md:py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[11px] md:text-[12px] tracking-widest uppercase rounded-lg md:rounded-xl shadow-lg shadow-orange-500/20 active:scale-95 transition-all"
+                        className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-medium text-[11px] tracking-widest uppercase rounded-lg shadow-lg shadow-orange-500/20 active:scale-95 transition-all"
                     >
                         BOOK A CALL
                     </button>
                 </div>
             </motion.nav>
 
-            {/* MOBILE DOCK - Slimmer version */}
+            {/* MOBILE DOCK */}
             <div className="lg:hidden fixed bottom-6 left-0 w-full z-[1001] flex justify-center px-6">
                 <motion.div 
                     initial={{ y: 40, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="flex items-center justify-around w-full max-w-[360px] bg-black/20 dark:bg-white/5 backdrop-blur-3xl border border-white/10 p-2 rounded-[22px] shadow-2xl"
+                    className="flex items-center justify-around w-full max-w-[380px] bg-black/20 dark:bg-white/5 backdrop-blur-3xl border border-white/10 p-2 rounded-[22px] shadow-2xl"
                 >
                     {navLinks.map((link) => (
                         <button
@@ -126,16 +161,20 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                                     />
                                 )}
                             </AnimatePresence>
-
                             <span className={`relative z-10 transition-all duration-300 ${
-                                activeTab === link.section
-                                ? 'text-orange-500 scale-105'
-                                : 'text-[var(--foreground)] opacity-30'
+                                activeTab === link.section ? 'text-orange-500 scale-105' : 'text-[var(--foreground)] opacity-30'
                             }`}>
                                 {React.cloneElement(link.icon, { size: 18 })}
                             </span>
                         </button>
                     ))}
+                    {/* Career Icon for Mobile */}
+                    <button 
+                        onClick={() => router.push('/careers')}
+                        className="flex items-center justify-center w-12 h-12 text-[var(--foreground)] opacity-30 hover:opacity-100 transition-all"
+                    >
+                        <Briefcase size={18} />
+                    </button>
                 </motion.div>
             </div>
         </>
@@ -143,4 +182,3 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
 }
 
 export default Navbar
- 
