@@ -18,15 +18,17 @@ export const metadata = {
   authors: [{ name: 'FrameX-Tech Farm' }],
   creator: 'FrameX-Tech Farm',
 
+  metadataBase: new URL('https://www.framextechfarm.in'),
+
   openGraph: {
     title: 'FrameX-Tech Farm | UI/UX & Web Development',
     description:
       'Creative UI/UX design and web development agency helping brands grow online.',
-    url: 'https://www.framextechfarm.in/',
+    url: 'https://www.framextechfarm.in',
     siteName: 'FrameX-Tech Farm',
     images: [
       {
-        url: 'https://https://www.framextechfarm.in/og-image.jpg',
+        url: '/og-image.jpg', // ✅ relative path use pannom
         width: 1200,
         height: 630,
         alt: 'FrameX-Tech Farm Preview',
@@ -41,14 +43,16 @@ export const metadata = {
     title: 'FrameX-Tech Farm',
     description:
       'UI/UX Design & Web Development Agency for modern businesses.',
-    images: ['https://https://www.framextechfarm.in/og-image.jpg'],
+    images: ['/og-image.png'], // ✅ fixed
   },
 
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
-
-  metadataBase: new URL('https://www.framextechfarm.in/'),
 };
 
 export default function RootLayout({ children }) {
