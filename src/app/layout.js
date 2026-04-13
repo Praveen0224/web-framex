@@ -2,23 +2,32 @@ import '../index.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 
 export const metadata = {
-  title: 'FrameX-Tech Farm | Design & Develop with us',
+  title: 'FrameX-Tech Farm | UI/UX Design & Web Development in Kerala',
   description:
-    'FrameX-Tech Farm is a creative agency offering UI/UX design, web development, and digital solutions to grow your business online.',
+    'FrameX-Tech Farm is a creative UI/UX design and web development agency in Kerala helping businesses grow with modern digital solutions.',
 
   keywords: [
-    'UI UX Design',
-    'Web Development',
-    'Design Agency',
-    'Frontend Developer',
-    'Next.js Development',
-    'Kerala Web Designer'
+    'UI UX Design ',
+    'Web Development ',
+    'Design Agency Nagercoil',
+    'Frontend Development',
+    'Online Courses',
+    'Freelancing projects'
   ],
 
   authors: [{ name: 'FrameX-Tech Farm' }],
   creator: 'FrameX-Tech Farm',
 
   metadataBase: new URL('https://www.framextechfarm.in'),
+
+  alternates: {
+    canonical: '/',
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 
   openGraph: {
     title: 'FrameX-Tech Farm | UI/UX & Web Development',
@@ -28,7 +37,7 @@ export const metadata = {
     siteName: 'FrameX-Tech Farm',
     images: [
       {
-        url: '/og-image.jpg', // ✅ relative path use pannom
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'FrameX-Tech Farm Preview',
@@ -43,7 +52,7 @@ export const metadata = {
     title: 'FrameX-Tech Farm',
     description:
       'UI/UX Design & Web Development Agency for modern businesses.',
-    images: ['/og-image.png'], // ✅ fixed
+    images: ['/og-image.png'], // ✅ same image use pannom
   },
 
   icons: {
