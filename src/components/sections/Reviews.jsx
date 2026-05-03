@@ -1,105 +1,134 @@
 'use client';
-import React from 'react';
-import { Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bell, User, Star, ChevronRight } from 'lucide-react';
 
-const reviews = [
-    { name: "Adrian K.", role: "CTO, Neuralink", text: "The architecture is clean, fast, and futuristic. Exactly what we needed.", rating: 5 },
-    { name: "Sarah Chen", role: "Product Design", text: "Unbelievable attention to detail. The best UI kit I've used in years.", rating: 5 },
-    { name: "Marcus V.", role: "Founder, Helios", text: "Professional, reliable, and the code quality is top-tier. 10/10.", rating: 5 },
-    { name: "Elena R.", role: "Design Lead", text: "Smooth integration and beautiful components. Saved us weeks of work.", rating: 5 }
+const reviewsData = [
+    { name: "Alex Rivera", text: "The most intuitive dashboard I've ever used. Clean and powerful.", time: "Just now" },
+    { name: "Samantha J.", text: "Finally a UI kit that understands modern design patterns. 10/10.", time: "2m ago" },
+    { name: "Jordan Smith", text: "Code quality is exceptional. Integration was seamless.", time: "15m ago" },
+    { name: "Liam Chen", text: "Saved our team weeks of development time. Worth every penny.", time: "1h ago" },
+    { name: "Maria Garcia", text: "The attention to detail in these components is breathtaking.", time: "3h ago" },
+    { name: "Olivia Martinez", text: "Finally a UI kit that understands modern design patterns. 10/10.", time: "2m ago" },
 ];
 
-const Reviews = () => {
-    const duplicatedReviews = [...reviews, ...reviews, ...reviews];
+const BackgroundRow = ({ items, duration, reverse = false }) => (
+    <div className="flex w-full overflow-hidden mb-4 md:mb-8 opacity-50"> 
+        <motion.div 
+            initial={{ x: reverse ? "-50%" : "0%" }}
+            animate={{ x: reverse ? "0%" : "-50%" }}
+            transition={{ duration, repeat: Infinity, ease: "linear" }}
+            className="flex gap-4 md:gap-8 whitespace-nowrap"
+        >
+            {[...items, ...items, ...items, ...items].map((rev, i) => (
+                <div 
+                    key={i} 
+                    className="min-w-[200px] md:min-w-[320px] bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col gap-2"
+                >
+                    <span className="text-[10px] font-bold uppercase text-white/40">{rev.name}</span>
+                    <p className="text-[11px] text-white/30 whitespace-normal line-clamp-1 italic">"{rev.text}"</p>
+                </div>
+            ))}
+        </motion.div>
+    </div>
+);
+
+const FinalInteractiveReviews = () => {
+    const [index, setIndex] = useState(0);
+
+    const nextReview = () => {
+        setIndex((prev) => (prev + 1) % reviewsData.length);
+    };
 
     return (
-        <section id="reviews" className="relative w-full bg-[#030303] text-white py-20 overflow-hidden border-t border-white/5 font-sans">
+        <section className="relative w-full min-h-screen bg-[#020202] text-white py-10 flex flex-col items-center justify-center overflow-hidden font-sans">
             
-            {/* Background Decor */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-40">
-                <div className="absolute top-[-10%] left-[10%] w-[300px] h-[300px] bg-blue-600/10 blur-[100px] rounded-full" />
-                <div className="absolute bottom-[-10%] right-[10%] w-[300px] h-[300px] bg-purple-600/10 blur-[100px] rounded-full" />
-            </div>
-
-            <div className="relative z-10 max-w-7xl mx-auto">
+            {/* 1. ANIMATED BACKGROUND - NOW WITH 6 ROWS */}
+            <div className="absolute inset-0 z-0 flex flex-col justify-center rotate-[-8deg] scale-125 pointer-events-none opacity-70">
+                <BackgroundRow items={reviewsData} duration={50} />
+                <BackgroundRow items={reviewsData} duration={70} reverse />
+                <BackgroundRow items={reviewsData} duration={60} />
+                <BackgroundRow items={reviewsData} duration={85} reverse />
+                {/* Added 2 more rows here to make it 6 total */}
+                <BackgroundRow items={reviewsData} duration={55} />
+                <BackgroundRow items={reviewsData} duration={75} reverse />
                 
-                {/* --- REVIEWS SECTION --- */}
-                <div className="px-6 mb-10">
-                    <h2 className="text-4xl md:text-6xl font-light tracking-tighter mb-12 leading-[0.85] uppercase">
-                        Wall of <br /> 
-                        <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent text-5xl">Trusted words</span> <br />
-                    </h2>
-                    <p className="text-white/40 text-xs md:text-sm mt-1">Trusted by many happy clients</p>
-                </div>
-
-                <div className="relative">
-                    {/* Gradient Fades */}
-                    <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-[#030303] to-transparent z-20 pointer-events-none" />
-                    <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-[#030303] to-transparent z-20 pointer-events-none" />
-
-                    {/* MOBILE: snap-x ensures one card per "page" view */}
-                    <div className="flex overflow-x-auto md:overflow-hidden snap-x snap-mandatory no-scrollbar cursor-grab active:cursor-grabbing">
-                        <div className="flex gap-4 px-6 md:px-0 animate-marquee-slow hover:[animation-play-state:paused] py-4">
-                            {duplicatedReviews.map((rev, i) => (
-                                <div 
-                                    key={i}
-                                    className="snap-center min-w-[calc(100vw-48px)] md:min-w-[320px] p-6 rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:border-white/10"
-                                >
-                                    <div>
-                                        <div className="flex gap-0.5 mb-4">
-                                            {[...Array(5)].map((_, index) => (
-                                                <Star key={index} size={10} className="text-white/60" fill="currentColor" />
-                                            ))}
-                                        </div>
-                                        
-                                        <p className="text-sm md:text-base font-light text-white/70 leading-relaxed mb-6">
-                                            "{rev.text}"
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center gap-3 mt-auto">
-                                        <div className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold text-white/60">
-                                            {rev.name.charAt(0)}
-                                        </div>
-                                        <div>
-                                            <h4 className="text-[10px] font-bold uppercase tracking-widest text-white/90">{rev.name}</h4>
-                                            <p className="text-[8px] text-white/30 uppercase tracking-widest">{rev.role}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202] z-10" />
             </div>
 
-            <style jsx>{`
-                /* Hide scrollbar */
-                .no-scrollbar::-webkit-scrollbar {
-                    display: none;
-                }
-                .no-scrollbar {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
-                }
+            {/* 2. HEADER AREA */}
+            <div className="relative z-30 text-center mb-10 px-6">
+                <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-6"
+                >
+                    <Star size={14} className="text-orange-500 fill-orange-500" />
+                    <span className="text-[11px] uppercase tracking-widest font-bold text-white/80">User Testimonials</span>
+                </motion.div>
+                <h2 className="text-3xl md:text-6xl font-bold tracking-tighter mb-4">
+                    Trusted by <span className="text-orange-500">thousands.</span>
+                </h2>
+            </div>
 
-                @keyframes marquee {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.33%); }
-                }
+            {/* 3. ENHANCED MOBILE CARD */}
+            <div className="relative z-40 w-full max-w-[440px] px-5">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: -20, scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="relative group"
+                    >
+                        {/* Glow Effect behind card */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 via-pink-600 to-purple-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-20 transition duration-1000"></div>
+                        
+                        <div className="relative bg-black/80 backdrop-blur-2xl p-8 md:p-10 rounded-[2.5rem] shadow-2xl">
+                            
+                            {/* Mobile-optimized Icon */}
+                            <div className="absolute -top-6 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0">
+                                <div className="bg-gradient-to-br from-orange-500 to-pink-600 p-4 rounded-2xl shadow-lg shadow-orange-500/20">
+                                    <Bell className="text-white fill-white" size={20} />
+                                </div>
+                            </div>
 
-                .animate-marquee-slow {
-                    animation: marquee 40s linear infinite;
-                }
+                            <div className="mt-6 text-center md:text-left">
+                                <div className="flex justify-center md:justify-start items-center gap-2 text-white/30 text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+                                    <span>{reviewsData[index].time}</span>
+                                    <span className="h-1 w-1 bg-white/20 rounded-full" />
+                                    <span>Verified</span>
+                                </div>
 
-                @media (max-width: 768px) {
-                    .animate-marquee-slow {
-                        animation: marquee 30s linear infinite;
-                    }
-                }
-            `}</style>
+                                <h3 className="text-xl md:text-2xl font-bold mb-4 leading-snug">
+                                    {reviewsData[index].name}
+                                </h3>
+
+                                <p className="text-white/70 font-medium leading-relaxed mb-10 text-base md:text-lg italic">
+                                    "{reviewsData[index].text}"
+                                </p>
+
+                                {/* GRADIENT BUTTONS */}
+                                <div className="flex flex-col gap-3">
+                                    <button 
+                                        onClick={nextReview}
+                                        className="w-full bg-gradient-to-r from-[#FF4D00] via-[#FF007A] to-[#7000FF] text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-pink-500/10"
+                                    >
+                                        Next Story
+                                        <ChevronRight size={18} />
+                                    </button>
+                                    <button className="w-full bg-white/5 hover:bg-white/10 text-white/60 font-semibold py-4 rounded-2xl border border-white/5 transition-colors">
+                                        View All
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
         </section>
     );
 };
 
-export default Reviews;
+export default FinalInteractiveReviews;

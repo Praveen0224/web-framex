@@ -1,267 +1,130 @@
 'use client';
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-    Mail, Phone, Send, User, MessageSquare, Zap, MapPin, 
-    ArrowUpRight, Instagram, Linkedin, AlertCircle 
-} from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Star, Send } from 'lucide-react'
 import { supabase } from '@/lib/supabaseClient'
 
-/**
- * ModernInput Component
- * Renders a stylized input field with an icon, label, and animated underline.
- */
-const ModernInput = ({ icon: Icon, label, children, isFocused, optional }) => (
-    <div className="relative group mb-6 md:mb-8">
-        <div className="flex items-center gap-4 pb-2">
-            <Icon size={16} className={`${isFocused ? 'text-orange-600' : 'text-black/20'} transition-colors duration-500`} />
-            <div className="flex-1">
-                <div className="flex justify-between items-center">
-                    <p className={`text-[9px] uppercase tracking-[0.3em] font-bold mb-1 transition-colors ${isFocused ? 'text-orange-600' : 'text-black/40'}`}>
-                        {label}
-                    </p>
-                    {optional && <span className="text-[8px] text-black/20 tracking-widest uppercase italic font-light">Optional</span>}
+// --- HELPER COMPONENT: SCROLLING COLUMN ---
+const ImageColumn = ({ images, speed = 25, reverse = false }) => (
+    <div className="flex flex-col gap-3 overflow-hidden h-full relative">
+        <motion.div 
+            className="flex flex-col gap-3"
+            animate={{ y: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
+            transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
+        >
+            {[...images, ...images].map((src, i) => (
+                <div key={i} className="relative w-full aspect-[4/5] rounded-xl overflow-hidden border border-white/5 shadow-2xl">
+                    <img 
+                        src={src} 
+                        alt="Premium Work" 
+                        className="object-cover w-full h-full grayscale hover:grayscale-0 transition-all duration-700 hover:scale-110" 
+                    />
                 </div>
-                {children}
-            </div>
-        </div>
-        <div className="relative h-[1px] w-full bg-black/5 overflow-hidden">
-            <motion.div
-                initial={false}
-                animate={{ x: isFocused ? 0 : '-100%' }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0 bg-orange-600"
-            />
-        </div>
+            ))}
+        </motion.div>
     </div>
 );
 
-const Contact = () => {
-    const [focusedField, setFocusedField] = useState(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState('');
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        location: '',
-        message: ''
-    });
+const ContactNewsletter = () => {
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState(''); 
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    // Updated: Removed Twitter and Github
-    const socialLinks = [
-        { icon: Instagram, href: "https://www.instagram.com/framex_techfarm/" },
-        { icon: Linkedin, href: "https://www.linkedin.com/in/framex-tech-farm-453b513b6/" }
-    ];
-
-    const handleSubmit = async (e) => {
+    const handleSubscribe = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        setSubmitStatus('');
-
+        setStatus('submitting');
         try {
-            const { error } = await supabase
-                .from('contact_submissions')
-                .insert([
-                    {
-                        name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone,
-                        location: formData.location,
-                        description: formData.message,
-                    }
-                ]);
-
+            const { error } = await supabase.from('newsletter_subs').insert([{ email }]);
             if (error) throw error;
-
-            setSubmitStatus('success');
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                location: '',
-                message: ''
-            });
-
-        } catch (error) {
-            console.error('Submission Error:', error);
-            setSubmitStatus('error');
-        } finally {
-            setIsSubmitting(false);
+            setStatus('success');
+            setEmail('');
+        } catch (err) {
+            setStatus('error');
         }
     };
 
+    const column1 = [
+        "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=2055&auto=format&fit=crop"
+    ];
+    const column2 = [
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1964&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1483058712412-4245e9b90334?q=80&w=2070&auto=format&fit=crop"
+    ];
+
     return (
-        <section id="contact" className="relative w-full bg-[#050505] text-white py-24 md:py-32 overflow-hidden font-sans border-t border-white/5">
-            
-            {/* BACKGROUND DECOR */}
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
-                <div className="absolute top-[-5%] right-[-10%] w-[60%] h-[50%] bg-orange-600/10 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-orange-900/10 blur-[120px] rounded-full" />
-            </div>
+        <section className="relative w-full bg-[#050505] text-white py-20 md:py-32 overflow-hidden border-t border-white/5">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600/5 blur-[120px] pointer-events-none" />
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+            <div className="max-w-7xl mx-auto px-6 relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    {/* LEFT CONTENT */}
+                    <div className="lg:col-span-7">
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="flex text-orange-500">
+                                {[1, 2, 3, 4, 5].map((s) => <Star key={s} size={12} fill="currentColor" />)}
+                            </div>
+                            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">Trusted by 50+ founders</span>
+                        </div>
 
-                    {/* LEFT SIDE: TYPOGRAPHY PITCH */}
-                    <div className="lg:col-span-5">
-                        <motion.div 
-                            initial={{ opacity: 0, x: -20 }} 
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <div className="flex items-center gap-3 text-orange-500 mb-8">
-                                <Zap size={14} fill="currentColor" />
-                                <span className="text-[10px] tracking-[0.5em] uppercase font-black">Transmission_Unit</span>
-                            </div>
-                            <h2 className="text-6xl md:text-8xl font-light tracking-tighter leading-[0.8] mb-8 uppercase">
-                                REACH <br /> <span className="text-white/5 bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">OUT</span>
-                            </h2>
-                            <p className="text-[11px] md:text-sm text-white/40 font-light max-w-sm leading-relaxed mb-12 uppercase tracking-[0.2em]">
-                                Connect with our core architecture team to initiate your next high-end build.
-                            </p>
-                            <div className="space-y-2 mb-12">
-                                <div className="group cursor-pointer">
-                                    <p className="text-[9px] uppercase tracking-[0.4em] text-orange-500/50 mb-1 font-bold">EMAIL</p>
-                                    <p className="text-xl md:text-2xl font-light tracking-tight group-hover:text-orange-500 transition-colors">framextechfarm@gmail.com</p>
-                                </div>
-                                <div className="group cursor-pointer">
-                                    <p className="text-[9px] uppercase tracking-[0.4em] text-orange-500/50 mb-1 font-bold">LOCATION</p>
-                                    {/* Updated: Added Nagercoil and Virtual Platform context */}
-                                    <p className="text-xl md:text-2xl font-light tracking-tight group-hover:text-orange-500 transition-colors">Nagercoil (Virtual Platform)</p>
-                                </div>
-                            </div>
-                            <div className="flex gap-6 items-center border-t border-white/5 pt-5">
-                                {socialLinks.map((Social, i) => (
-                                    <motion.a key={i} href={Social.href} whileHover={{ y: -3, color: '#f97316' }} className="text-white/30 transition-colors">
-                                        <Social.icon size={20} />
-                                    </motion.a>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </div>
+                        <h2 className="text-4xl md:text-7xl font-extralight tracking-tight leading-[1.1] mb-8">
+                            Ready to transform your <br />
+                            <span className="bg-gradient-to-r from-orange-500 via-purple-500 to-pink-500 bg-clip-text text-transparent font-medium">
+                                digital vision?
+                            </span>
+                        </h2>
 
-                    {/* RIGHT SIDE: THE FORM */}
-                    <div className="lg:col-span-7 w-full">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            className="relative bg-white/80 p-8 md:p-14 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]"
-                        >
-                            <form onSubmit={handleSubmit} className="text-black">
-                                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
-                                    <ModernInput icon={User} label="Name" isFocused={focusedField === 'name'}>
-                                        <input 
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            onFocus={() => setFocusedField('name')} 
-                                            onBlur={() => setFocusedField(null)} 
-                                            className="w-full bg-transparent outline-none text-black text-lg font-medium placeholder:text-black/10" 
-                                            placeholder="John Doe" 
-                                            required 
-                                        />
-                                    </ModernInput>
-                                    <ModernInput icon={Mail} label="Email" isFocused={focusedField === 'email'}>
-                                        <input 
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            onFocus={() => setFocusedField('email')} 
-                                            onBlur={() => setFocusedField(null)} 
-                                            className="w-full bg-transparent outline-none text-black text-lg font-medium placeholder:text-black/10" 
-                                            placeholder="john@studio.com" 
-                                            type="email" 
-                                            required 
-                                        />
-                                    </ModernInput>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
-                                    <ModernInput icon={Phone} label="Phone No" optional isFocused={focusedField === 'phone'}>
-                                        <input 
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleChange}
-                                            onFocus={() => setFocusedField('phone')} 
-                                            onBlur={() => setFocusedField(null)} 
-                                            className="w-full bg-transparent outline-none text-black text-lg font-medium placeholder:text-black/10" 
-                                            placeholder="+91" 
-                                        />
-                                    </ModernInput>
-                                    <ModernInput icon={MapPin} label="Location" isFocused={focusedField === 'location'}>
-                                        <input 
-                                            name="location"
-                                            value={formData.location}
-                                            onChange={handleChange}
-                                            onFocus={() => setFocusedField('location')} 
-                                            onBlur={() => setFocusedField(null)} 
-                                            className="w-full bg-transparent outline-none text-black text-lg font-medium placeholder:text-black/10" 
-                                            placeholder="Nagercoil, India" 
-                                            required 
-                                        />
-                                    </ModernInput>
-                                </div>
-                                <ModernInput icon={MessageSquare} label="Brief Description" isFocused={focusedField === 'msg'}>
-                                    <textarea 
-                                        name="message"
-                                        value={formData.message}
-                                        onChange={handleChange}
-                                        onFocus={() => setFocusedField('msg')} 
-                                        onBlur={() => setFocusedField(null)} 
-                                        rows="2" 
-                                        className="w-full bg-transparent outline-none text-black text-lg font-medium resize-none placeholder:text-black/10" 
-                                        placeholder="Describe your vision..." 
-                                        required 
-                                    />
-                                </ModernInput>
-                                <motion.button
-                                    whileHover={{ scale: 1.01, backgroundColor: '#000', color: '#fff' }}
-                                    whileTap={{ scale: 0.99 }}
-                                    className="relative w-full py-6 bg-orange-600 text-white font-bold uppercase tracking-[0.4em] text-[10px] rounded-2xl mt-4 transition-all duration-300 shadow-lg"
+                        <p className="text-white/40 text-base md:text-lg max-w-lg mb-10 font-light leading-relaxed">
+                            Drop your email below. Our architecture team will reach out to discuss your next high-end build.
+                        </p>
+
+                        <form onSubmit={handleSubscribe} className="relative max-w-md">
+                            <div className="flex items-center p-1.5 bg-white/[0.03] border border-white/10 rounded-2xl focus-within:border-orange-500/50 transition-all duration-500 backdrop-blur-md">
+                                <input 
+                                    type="email" 
+                                    placeholder="yourname@work.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="flex-1 bg-transparent border-none outline-none px-4 py-3 text-white text-sm placeholder:text-white/20"
+                                    required
+                                />
+                                <button 
+                                    disabled={status === 'submitting'}
+                                    className="bg-white text-black hover:bg-orange-500 hover:text-white font-bold px-6 py-3 rounded-xl transition-all duration-300 flex items-center gap-2 text-xs uppercase tracking-wider"
                                 >
-                                    <span className="relative z-10 flex items-center justify-center gap-3">
-                                        {isSubmitting ? "TRANSMITTING..." : "Send Transmission"} <ArrowUpRight size={16} />
-                                    </span>
-                                </motion.button>
-
-                                {submitStatus === 'error' && (
-                                    <motion.div 
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-600 rounded-xl text-[10px] flex items-center gap-3 font-bold uppercase tracking-widest"
-                                    >
-                                        <AlertCircle size={14} />
-                                        Error Transmitting Data. Please check your connection.
-                                    </motion.div>
-                                )}
-                            </form>
-                            
-                            <AnimatePresence>
-                                {submitStatus === 'success' && (
-                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center text-center p-10 rounded-[2.5rem]">
-                                        <div className="w-20 h-20 rounded-full bg-orange-50 flex items-center justify-center mb-6">
-                                            <Send size={30} className="text-orange-600" />
-                                        </div>
-                                        <h2 className="text-4xl font-bold text-black mb-2 uppercase tracking-tighter">Sent.</h2>
-                                        <button onClick={() => setSubmitStatus('')} className="bg-black text-white px-8 py-3 rounded-full font-bold text-[9px] tracking-[0.4em] uppercase">Dismiss</button>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
+                                    {status === 'submitting' ? '...' : (
+                                        <>Contact Me <Send size={14} /></>
+                                    )}
+                                </button>
+                            </div>
+                        </form>
                     </div>
+
+                    {/* RIGHT CONTENT: SCROLLING GRID WITH IMPROVED SHADOWS */}
+                    <div className="lg:col-span-5 h-[400px] md:h-[650px] flex gap-3 relative skew-y-3 lg:skew-y-6 lg:rotate-3 transform-gpu overflow-hidden">
+                        <div className="flex-1 -mt-10 md:-mt-20">
+                            <ImageColumn images={column1} speed={40} />
+                        </div>
+                        <div className="flex-1 pt-10 md:pt-20">
+                            <ImageColumn images={column2} speed={35} reverse />
+                        </div>
+                        
+                        {/* TOP SHADOW EFFECT */}
+                        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-20" />
+                        
+                        {/* BOTTOM SHADOW EFFECT */}
+                        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-20" />
+                        
+                        {/* LEFT SIDE FADE (Desktop only) */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-transparent lg:block hidden pointer-events-none z-20" />
+                    </div>
+
                 </div>
             </div>
         </section>
     );
 };
 
-export default Contact;
+export default ContactNewsletter;
