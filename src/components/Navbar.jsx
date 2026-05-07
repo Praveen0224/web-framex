@@ -1,12 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutGrid, User, Mail, Sparkles, Briefcase, Menu, X, Zap } from 'lucide-react';
+import { Menu, X, Zap } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
-const Navbar = ({ onNavClick, setIsHovered }) => {
-    const router = useRouter();
+const Navbar = ({ onNavClick }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeTab, setActiveTab] = useState('home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,14 +15,20 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+    }, [isMobileMenuOpen]);
+
     const navLinks = [
         { name: 'Home', section: 'home' },
         { name: 'Services', section: 'services' },
         { name: 'Portfolio', section: 'portfolio' },
         { name: 'About', section: 'about' }
     ];
-
-    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
     const handleLinkClick = (section) => {
         setActiveTab(section);
@@ -33,38 +37,40 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
     };
 
     return (
+        // Changed: Removed "relative w-full" from header to prevent it from 
+        // taking up space in the document flow that might interfere with fixed positioning.
         <header>
             <motion.nav
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className={`fixed top-0 left-0 w-full z-[1000] flex items-center justify-between px-6 md:px-20 transition-all duration-500 ${
+                // Fix: Ensure "left-0 right-0" is used with "w-full" and "box-border"
+                // Added "box-border" to ensure padding doesn't add to the width.
+                className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 md:px-20 transition-all duration-500 box-border ${
                     isScrolled 
-                    ? 'h-20 bg-black/95 backdrop-blur-md border-b border-white/5' 
-                    : 'h-28 bg-transparent'
+                    ? 'h-16 md:h-20 bg-black/90 backdrop-blur-xl border-b border-white/5' 
+                    : 'h-20 md:h-28 bg-transparent'
                 }`}
             >
-                {/* LOGO SECTION - Large and Text-Free */}
+                {/* 1. LOGO */}
                 <div 
-                    className="flex items-center cursor-pointer"
+                    className="flex items-center cursor-pointer relative z-[1001]"
                     onClick={() => handleLinkClick('home')}
                 >
                     <img 
                         src="/framexlogo.png" 
                         alt="Logo" 
-                        className="h-40 md:h-45 w-auto object-contain transition-transform hover:scale-105" 
+                        className="h-32 md:h-48 w-auto object-contain transition-transform active:scale-95" 
                     />
                 </div>
 
-                {/* DESKTOP NAV LINKS */}
+                {/* 2. DESKTOP LINKS */}
                 <div className="hidden lg:flex items-center gap-10">
                     {navLinks.map((link) => (
                         <button
                             key={link.name}
                             onClick={() => handleLinkClick(link.section)}
-                            className={`text-[14px] font-medium transition-all duration-300 ${
-                                activeTab === link.section 
-                                ? 'text-orange-500' 
-                                : 'text-white/50 hover:text-white'
+                            className={`text-[14px] font-medium transition-colors ${
+                                activeTab === link.section ? 'text-orange-500' : 'text-white/50 hover:text-white'
                             }`}
                         >
                             {link.name}
@@ -72,57 +78,71 @@ const Navbar = ({ onNavClick, setIsHovered }) => {
                     ))}
                 </div>
 
-                {/* RIGHT SECTION: Theme + CTA + Burger */}
-                <div className="flex items-center gap-4 md:gap-8">
+                {/* 3. RIGHT ACTIONS */}
+                <div className="flex items-center gap-3 relative z-[1001]">
                     <div className="hidden md:block">
                         <ThemeToggle />
                     </div>
                     
                     <button
                         onClick={() => handleLinkClick('contact')}
-                        className="hidden sm:flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold text-[13px] rounded-lg transition-all active:scale-95 shadow-[0_0_20px_rgba(249,115,22,0.3)]"
+                        className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white font-bold text-[12px] rounded-lg shadow-lg shadow-orange-500/20"
                     >
-                        Book a Call
-                        <Zap size={14} fill="currentColor" />
+                        Book a Call <Zap size={14} fill="currentColor" />
                     </button>
 
-                    {/* MOBILE BURGER ICON */}
+                    {/* BURGER BUTTON */}
                     <button 
-                        className="lg:hidden text-white p-2"
-                        onClick={toggleMobileMenu}
+                        className="lg:hidden text-white p-2 flex items-center justify-center outline-none"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle Menu"
                     >
-                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                        {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
                     </button>
                 </div>
             </motion.nav>
 
-            {/* MOBILE OVERLAY MENU */}
+            {/* 4. MOBILE MENU OVERLAY */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="fixed top-20 left-0 w-full bg-black/95 z-[999] lg:hidden border-b border-white/10 overflow-hidden"
+                        initial={{ opacity: 0, x: '100%' }} // Animation from the right feels more natural
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        className="fixed inset-0 w-full h-screen bg-black z-[999] lg:hidden flex flex-col items-center justify-center overflow-hidden"
                     >
-                        <div className="flex flex-col p-6 gap-6">
-                            {navLinks.map((link) => (
-                                <button
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-500/10 blur-[100px] rounded-full" />
+                        
+                        <div className="relative flex flex-col items-center gap-4 px-6 w-full max-w-xs text-center">
+                            {navLinks.map((link, idx) => (
+                                <motion.button
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.1 }}
                                     key={link.name}
                                     onClick={() => handleLinkClick(link.section)}
-                                    className={`text-left text-lg font-medium ${
-                                        activeTab === link.section ? 'text-orange-500' : 'text-white/70'
+                                    className={`text-3xl font-light tracking-tight ${
+                                        activeTab === link.section ? 'text-orange-500 font-medium' : 'text-white/70'
                                     }`}
                                 >
                                     {link.name}
-                                </button>
+                                </motion.button>
                             ))}
-                            <button
+                            
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.4 }}
                                 onClick={() => handleLinkClick('contact')}
-                                className="w-full py-4 bg-orange-500 text-white font-bold rounded-lg text-center"
+                                className="w-full mt-4 py-4 bg-orange-500 text-white font-bold rounded-xl text-lg flex items-center justify-center gap-2"
                             >
-                                Book a Call
-                            </button>
+                                Book a Call <Zap size={20} fill="currentColor" />
+                            </motion.button>
+                            
+                            <div className="mt-4">
+                                <ThemeToggle />
+                            </div>
                         </div>
                     </motion.div>
                 )}

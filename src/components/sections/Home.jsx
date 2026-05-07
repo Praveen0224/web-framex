@@ -3,14 +3,14 @@ import { motion, useSpring, useTransform } from 'framer-motion'
 
 // Array of diverse tech/design images
 const images = [
-    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=200",
-    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=200",
-    "https://images.unsplash.com/photo-1558655146-d09347e92766?w=200",
-    "https://images.unsplash.com/photo-1581291518655-9523bb99a9f0?w=200",
-    "https://images.unsplash.com/photo-1551434678-e076c223a692?w=200",
-    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200",
-    "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200",
-    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=200",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400",
+    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400",
+    "https://images.unsplash.com/photo-1558655146-d09347e92766?w=400",
+    "https://images.unsplash.com/photo-1581291518655-9523bb99a9f0?w=400",
+    "https://images.unsplash.com/photo-1551434678-e076c223a692?w=400",
+    "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400",
+    "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400",
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400",
 ];
 
 const ImageColumn = ({ reverse = false, speed = 40 }) => (
@@ -21,8 +21,9 @@ const ImageColumn = ({ reverse = false, speed = 40 }) => (
             className="flex flex-col gap-2 md:gap-3"
         >
             {[...images, ...images, ...images].map((img, i) => (
-                <div key={i} className="w-full aspect-square bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden border border-white/5 shadow-inner">
-                    <img src={img} alt="work" className="w-full h-full object-cover opacity-40 grayscale" />
+                <div key={i} className="w-full aspect-square bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden border border-white/10 shadow-inner">
+                    {/* Changed opacity from 40 to 80 and removed grayscale */}
+                    <img src={img} alt="work" className="w-full h-full object-cover opacity-80" />
                 </div>
             ))}
         </motion.div>
@@ -53,7 +54,8 @@ const Home = () => {
         <div className="relative min-h-screen w-full bg-[#020202] font-sans text-white overflow-hidden flex flex-col items-center justify-center">
             
             {/* 1. DENSE 5-COLUMN BACKGROUND - FULLY RESPONSIVE */}
-            <div className="absolute inset-0 z-0 flex justify-center gap-2 md:gap-4 px-2 opacity-[0.18] pointer-events-none">
+            {/* Increased container opacity from 0.18 to 0.4 for better visibility */}
+            <div className="absolute inset-0 z-0 flex justify-center gap-2 md:gap-4 px-2 opacity-[0.4] pointer-events-none">
                 <ImageColumn speed={55} />
                 <ImageColumn reverse speed={48} />
                 <ImageColumn speed={62} />
@@ -67,7 +69,7 @@ const Home = () => {
 
             {/* 2. AMBIENT BACKGROUND GLOW */}
             <div className="fixed inset-0 z-10 pointer-events-none">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[50vw] h-[50vw] bg-purple-600/10 blur-[120px] rounded-full animate-pulse" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[50vw] h-[50vw] bg-purple-600/10 blur-[80px] rounded-full animate-pulse" />
             </div>
 
             {/* 3. MAIN CONTENT */}
@@ -77,9 +79,6 @@ const Home = () => {
                 transition={{ duration: 1, ease: "easeOut" }}
                 className="relative z-20 flex flex-col items-center w-full max-w-7xl px-4 md:px-6 text-center pt-10"
             >
-                {/* Minimalist Badge */}
-
-                {/* HEADING (Responsive Sizes) */}
               <h1 className="text-[2.5rem] md:text-7xl lg:text-[7.5rem] font-light tracking-tighter leading-[1] mb-6 md:mb-8">
     The{" "}
     <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500">
@@ -89,13 +88,11 @@ const Home = () => {
     freelance tech partner
 </h1>
 
-                {/* DESCRIPTION */}
-                <p className="text-white/40 text-xs md:text-lg font-light max-w-xl md:max-w-2xl leading-relaxed mb-10 md:mb-14 tracking-wide px-4">
+                <p className="text-white/60 text-xs md:text-lg font-light max-w-xl md:max-w-2xl leading-relaxed mb-10 md:mb-14 tracking-wide px-4">
                     Helping brands build high-performance digital products with 
                     immersive design and scalable full-stack architectures.
                 </p>
 
-                {/* BUTTONS (Stacked on mobile, row on desktop) */}
                 <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 mb-16 md:mb-24 w-full sm:w-auto">
                     <button className="group relative w-[80%] sm:w-auto px-10 md:px-12 py-3.5 md:py-4 rounded-full bg-white text-black text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase overflow-hidden transition-all active:scale-95 shadow-xl">
                         <span className="relative z-10">Start Project</span>
@@ -106,7 +103,6 @@ const Home = () => {
                     </button>
                 </div>
 
-                {/* TRUST CARD (Optimized for Mobile) */}
                 <div className="px-6 md:px-10 py-4 md:py-5 bg-neutral-950/80 border border-white/5 rounded-2xl md:rounded-[2.5rem] backdrop-blur-2xl flex flex-col sm:flex-row items-center gap-4 md:gap-8 mb-10">
                     <div className="flex -space-x-3">
                         {[1, 2, 3, 4].map(id => (
@@ -125,7 +121,6 @@ const Home = () => {
                 </div>
             </motion.main>
 
-            {/* Grain/Noise Overlay */}
             <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-50" />
         </div>
     )
