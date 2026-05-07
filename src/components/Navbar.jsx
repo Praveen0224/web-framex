@@ -25,9 +25,11 @@ const Navbar = ({ onNavClick }) => {
 
     const navLinks = [
         { name: 'Home', section: 'home' },
+        { name: 'About', section: 'about' },
+        { name: 'Guidance', section: 'guidance' },
         { name: 'Services', section: 'services' },
         { name: 'Portfolio', section: 'portfolio' },
-        { name: 'About', section: 'about' }
+
     ];
 
     const handleLinkClick = (section) => {

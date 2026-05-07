@@ -6,9 +6,9 @@ import Home from '../components/sections/Home';
 import About from '../components/sections/About';
 import Services from '../components/sections/Services';
 import Portfolio from '../components/sections/Projects';
-import Contact from '../components/sections/Contact';
 import Reviews from '../components/sections/Reviews';
 import Footer from '../components/Footer';
+import StudentGuidance from '../components/sections/Student';
 
 
 export default function Page() {
@@ -53,6 +53,9 @@ export default function Page() {
             <section ref={sections.current.about} id="about" className="page-section">
                 <About />
             </section>
+            <section ref={sections.current.guidance} id="guidance" className="page-section">
+                <StudentGuidance />
+            </section>
 
             <section ref={sections.current.services} id="services" className="page-section">
                 <Services />
@@ -66,9 +69,7 @@ export default function Page() {
                 <Reviews />
             </section>
 
-            <section ref={sections.current.contact} id="contact" className="page-section">
-                <Contact />
-            </section>
+          
 
             <Footer />
         </div>

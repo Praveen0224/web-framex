@@ -64,13 +64,18 @@ export const metadata = {
   },
 };
 
+// src/app/layout.js (Simplified view)
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <head /> 
+      {/* Adding an empty <head /> helps Next.js 
+         manage script injection points more clearly.
+      */}
+      <body className="antialiased"> 
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="dark" // Excellent, forced dark avoids flash
           enableSystem
           disableTransitionOnChange
         >

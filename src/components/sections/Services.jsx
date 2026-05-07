@@ -5,21 +5,33 @@ import { motion, AnimatePresence } from "framer-motion";
 const services = [
   { 
     id: "01", 
-    title: "Web Design", 
-    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=1000",
-    desc: "We build bold, cohesive brand identities that leave a lasting impression." 
+    title: "UI/UX Designing", 
+    image: "https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?q=80&w=1000",
+    desc: "Crafting intuitive and beautiful user interfaces that provide seamless digital experiences." 
   },
   { 
     id: "02", 
-    title: "Brand Design", 
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000",
-    desc: "Crafting unique visual identities for modern brands." 
+    title: "Website Development", 
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1000",
+    desc: "Building high-performance, responsive websites using the latest modern technologies." 
   },
   { 
     id: "03", 
     title: "Logo Design", 
-    image: "https://images.unsplash.com/photo-1626785774625-ddc7c8241520?q=80&w=1000",
-    desc: "Memorable symbols that define your brand's essence." 
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000",
+    desc: "Creating unique and memorable brand identities that stand out in the market." 
+  },
+  { 
+    id: "04", 
+    title: "Poster Design", 
+    image: "https://images.unsplash.com/photo-1623039405147-547794f92e9e?q=80&w=1000",
+    desc: "High-impact visual designs for digital and print media that capture attention." 
+  },
+  { 
+    id: "05", 
+    title: "Course", 
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000",
+    desc: "Empowering students with industry-ready skills through practical, hands-on learning." 
   }
 ];
 
@@ -27,7 +39,7 @@ const ServicesSection = () => {
   const [index, setIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-cycle logic
+  // Auto-cycle logic (Original)
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
@@ -37,10 +49,10 @@ const ServicesSection = () => {
   }, [isHovered]);
 
   return (
-    <section className="relative w-full min-h-[90vh] bg-[#ececec] text-black py-12 md:py-20 overflow-hidden font-sans select-none">
+    <section className="relative w-full min-h-[90vh] bg-[#ececec] text-black py-12 md:py-20 overflow-hidden font-sans select-none flex flex-col items-center">
       
-      {/* 1. MINIMALIST HEADER */}
-      <div className="container mx-auto px-6 md:px-12 relative z-30">
+      {/* 1. CENTERED HEADER */}
+      <div className="container mx-auto px-6 md:px-12 relative z-30 text-center">
         <div className="mb-12">
           <span className="text-[10px] uppercase tracking-[0.4em] text-gray-500 mb-2 block">(Services)</span>
           <h2 className="text-5xl md:text-8xl font-light tracking-tight leading-[1.1]">
@@ -48,8 +60,8 @@ const ServicesSection = () => {
           </h2>
         </div>
         
-        {/* NAV TABS - Clean spacing */}
-        <div className="flex flex-row justify-between md:justify-start md:gap-24 border-t border-black/10 pt-6">
+        {/* CENTERED NAV TABS */}
+        <div className="flex flex-wrap justify-center gap-6 md:gap-16 border-t border-black/10 pt-6">
           {services.map((s, i) => (
             <button
               key={s.id}
@@ -71,22 +83,22 @@ const ServicesSection = () => {
         </div>
       </div>
 
-      {/* 2. BACKGROUND MARQUEE - Scales for Mobile */}
+      {/* 2. BACKGROUND MARQUEE (Original Logic) */}
       <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 pointer-events-none z-10">
         <motion.div 
           className="flex whitespace-nowrap"
-          animate={{ x: [0, -1000] }}
+          animate={{ x: [0, -1200] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         >
           {[...Array(4)].map((_, i) => (
-            <span key={i} className="text-[25vw] md:text-[20vw] font-bold uppercase text-orange-600/90 pr-20 tracking-tighter">
+            <span key={i} className="text-[25vw] md:text-[20vw] font-bold uppercase text-orange-600/70 pr-20 tracking-tighter">
               {services[index].title}
             </span>
           ))}
         </motion.div>
       </div>
 
-      {/* 3. CENTRAL IMAGE CARD - Responsive Sizing */}
+      {/* 3. CENTRAL IMAGE CARD */}
       <div className="relative z-20 flex justify-center items-center h-[40vh] md:h-[50vh] mt-10 md:mt-0">
         <AnimatePresence mode="wait">
           <motion.div
@@ -95,18 +107,18 @@ const ServicesSection = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 1.05, y: -30 }}
             transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
-            className="w-[85vw] h-[250px] md:w-[500px] md:h-[350px] rounded-[24px] md:rounded-[40px] overflow-hidden shadow-2xl border-4 border-white/50"
+            className="w-[85vw] h-[250px] md:w-[550px] md:h-[380px] rounded-[24px] md:rounded-[40px] overflow-hidden shadow-2xl"
           >
             <img 
               src={services[index].image} 
-              alt={s => s.title}
+              alt={services[index].title}
               className="w-full h-full object-cover"
             />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* 4. FOOTER DESCRIPTION */}
+      {/* 4. CENTERED FOOTER DESCRIPTION */}
       <div className="container mx-auto px-6 mt-8 md:mt-12 relative z-30 text-center">
         <AnimatePresence mode="wait">
           <motion.p 
