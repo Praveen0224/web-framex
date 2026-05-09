@@ -2,10 +2,9 @@ import '../index.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 
 export const metadata = {
-  title: 'FrameX-Tech Farm | UI/UX Design & Web Development in Kerala',
+  title: 'FrameX-Tech Farm | Your Freelance Tech Partner',
   description:
-    'FrameX-Tech Farm is a creative UI/UX design and web development agency in Kerala helping businesses grow with modern digital solutions.',
-
+'FrameX-Tech Farm is a passionate group of tech professionals and freelancers specializing in UI/UX design, web development, and modern digital solutions. We collaborate together to help businesses and startups grow with creative and innovative technology services.',
   keywords: [
     'UI UX Design ',
     'Web Development ',
