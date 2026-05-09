@@ -8,7 +8,7 @@ const projects = [
         title: 'Privielle', 
         tagline: 'Ecommerce Website', 
         desc: 'A premium digital storefront focused on high-end luxury aesthetics.',
-        image: '/Project1.png',
+        image: '/project1.png',
         color: '#121212'
     },
     { 
@@ -16,7 +16,7 @@ const projects = [
         title: 'SMR Holidays', 
         tagline: 'Tourism Website', 
         desc: 'Experience the beauty of Kodaikanal through a seamless travel interface.',
-        image: '/Project2.png',
+        image: '/project2.png',
         color: '#111111'
     },
   { 
@@ -24,7 +24,7 @@ const projects = [
     title: 'Zencrios', 
     tagline: 'Company Logo', 
     desc: 'Modern and professional logo branding design crafted for a strong and memorable business identity.',
-    image: '/Project3.png',
+    image: '/project3.png',
     color: '#0d0d0d'
 },
     
