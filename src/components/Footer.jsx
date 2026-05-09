@@ -2,11 +2,20 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Instagram, Linkedin, ArrowUpRight, Zap, Send, X } from 'lucide-react';
+import { Instagram, Linkedin, ArrowUpRight, Zap, X, Mail, Copy, Check } from 'lucide-react';
 
 const Footer = ({ onApply }) => {
     const currentYear = new Date().getFullYear();
-    const [modalContent, setModalContent] = useState(null); // 'terms' | 'privacy' | null
+    const [modalContent, setModalContent] = useState(null);
+    const [copied, setCopied] = useState(false);
+
+    const email = "framextechfarm@gmail.com";
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(email);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     const footerLinks = [
         {
@@ -30,101 +39,76 @@ const Footer = ({ onApply }) => {
         {
             title: 'LEGAL_UNIT',
             links: [
-                { name: 'PRIVACY', href: '#' },
-                { name: 'TERMS', href: '#' }
+                { name: 'PRIVACY', href: 'privacy' },
+                { name: 'TERMS', href: 'terms' }
             ]
         }
     ];
 
     return (
-        <footer className="relative bg-[#050505] text-white pt-16 pb-8 overflow-hidden font-sans border-t border-white/5">
+        <footer className="relative bg-[#050505] text-white pt-16 pb-8 overflow-hidden border-t border-white/5">
             
-            {/* --- BACKGROUND AMBIENCE --- */}
-            <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-orange-600/10 blur-[150px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-purple-600/10 blur-[150px] rounded-full pointer-events-none" />
+            {/* AMBIENCE - Reduced opacity for cleaner look */}
+            <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full pointer-events-none" />
             
-    
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 
-                <div className="flex flex-col lg:flex-row justify-between items-start mb-16 gap-10">
+                <div className="flex flex-col lg:flex-row justify-between items-start mb-12 gap-10">
                     
-                    {/* LEFT SECTION */}
-                    <div className="lg:max-w-2xl">
-                        <div className="flex items-center gap-3 mb-10">
-                            <motion.div 
-                                animate={{ opacity: [0.4, 1, 0.4] }}
-                                transition={{ repeat: Infinity, duration: 2 }}
-                            >
-                                <Zap size={16} className="text-orange-500 fill-orange-500" />
-                            </motion.div>
-                            <span className="text-[10px] tracking-[0.6em] uppercase font-black text-white/40">Transmission_Unit_Active</span>
+                    {/* LEFT: BRANDING */}
+                    <div className="lg:max-w-xl">
+                        <div className="flex items-center gap-2 mb-6">
+                            <Zap size={14} className="text-orange-500 fill-orange-500" />
+                            <span className="text-[9px] tracking-[0.4em] uppercase font-bold text-white/30">Unit_Active</span>
                         </div>
                         
-                        <h2 className="text-6xl md:text-8xl font-light tracking-tighter mb-12 leading-[0.85] uppercase">
-                            Let's build <br /> 
-                            <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent font-medium">the future</span> <br />
-                            together
+                        <h2 className="text-4xl md:text-7xl font-bold tracking-tighter mb-8 leading-[0.95] uppercase">
+                            Build <span className="bg-gradient-to-r from-orange-500 to-purple-500 bg-clip-text text-transparent">the future</span> <br />
+                            with us
                         </h2>
-                     {/* SOCIALS */}
-<div className="flex gap-5">
-    {[
-        { Icon: Linkedin, url: "https://www.linkedin.com/in/framex-tech-farm-453b513b6/" }, // Unga LinkedIn URL inga kudunga
-        { Icon: Instagram, url: "https://www.instagram.com/framex_techfarm/" }    // Unga Instagram URL inga kudunga
-    ].map((social, index) => (
-        <motion.a 
-            key={index}
-            href={social.url} 
-            target="_blank"           // Puthiya tab-la open aaga
-            rel="noopener noreferrer" // Security purpose-kaga
-            whileHover={{ y: -5, scale: 1.1 }}
-            className="w-14 h-14 rounded-full border border-white/10 flex items-center justify-center text-white/40 transition-all duration-500 hover:border-orange-500/50 hover:bg-orange-500/5 hover:text-white group"
-        >
-            <social.Icon size={22} className="group-hover:rotate-[360deg] transition-transform duration-700" />
-        </motion.a>
-    ))}
-</div>
+
+                        {/* EMAIL COMPACT CARD */}
+                        <div 
+                            className="group relative inline-flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-orange-500/30 transition-all cursor-pointer" 
+                            onClick={copyToClipboard}
+                        >
+                            <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
+                                {copied ? <Check size={16} /> : <Mail size={16} />}
+                            </div>
+                            <p className="text-white/80 font-mono text-sm">{email}</p>
+                            <Copy size={12} className="text-white/20 group-hover:text-white/60 transition-colors ml-2" />
+                        </div>
                     </div>
 
-                    {/* RIGHT SECTION */}
+                    {/* RIGHT: CTA & NAV */}
                     <div className="flex flex-col items-start lg:items-end w-full lg:w-auto">
-                        
-
                         <motion.button 
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={onApply}
-                            className="group relative px-12 py-4 bg-white text-black font-black rounded-full overflow-hidden mb-24 flex items-center gap-4 uppercase text-[12px] tracking-widest"
+                            className="group relative px-8 py-4 bg-orange-500 text-black font-bold rounded-full overflow-hidden mb-12 flex items-center gap-3 uppercase text-[11px] tracking-widest transition-all"
                         >
-                            <span className="relative z-10">Start a project</span>
-                            <ArrowUpRight size={18} className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            {/* Animated Background Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="absolute inset-0 bg-white group-hover:text-white" />
+                            <span className="relative z-10">Initiate Project</span>
+                            <ArrowUpRight size={18} className="relative z-10 group-hover:rotate-45 transition-transform" />
+                            <div className="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300" />
                         </motion.button>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-16 text-left w-full lg:w-auto">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-left w-full lg:min-w-[500px]">
                             {footerLinks.map((section) => (
                                 <div key={section.title}>
-                                    <h4 className="text-[10px] font-black tracking-[0.4em] mb-8 text-white/30 uppercase">
+                                    <h4 className="text-[9px] font-bold tracking-[0.2em] mb-4 text-orange-500/60 uppercase">
                                         {section.title}
                                     </h4>
-                                    <ul className="space-y-4">
+                                    <ul className="space-y-2">
                                         {section.links.map((link) => (
                                             <li key={link.name}>
-                                                {link.name === 'PRIVACY' || link.name === 'TERMS' ? (
-                                                    <button 
-                                                        onClick={() => setModalContent(link.name === 'PRIVACY' ? 'privacy' : 'terms')}
-                                                        className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px] tracking-widest flex items-center gap-2 group"
-                                                    >
-                                                        <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all" />
-                                                        {link.name}
-                                                    </button>
-                                                ) : (
-                                                    <a href={link.href} className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px] tracking-widest flex items-center gap-2 group">
-                                                        <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all" />
-                                                        {link.name}
-                                                    </a>
-                                                )}
+                                                <button 
+                                                    onClick={() => (link.href === 'privacy' || link.href === 'terms') ? setModalContent(link.href) : null}
+                                                    className="text-white/40 hover:text-white transition-all duration-200 text-[10px] tracking-widest flex items-center gap-2 group"
+                                                >
+                                                    <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all" />
+                                                    {link.name}
+                                                </button>
                                             </li>
                                         ))}
                                     </ul>
@@ -135,104 +119,44 @@ const Footer = ({ onApply }) => {
                 </div>
 
                 {/* BOTTOM BAR */}
-                <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5">
-                    <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
-                        <p className="text-[11px] font tracking-[0.2em] text-white/20">
-                            © {currentYear} FrameX-Tech Farm. All rights reserved.
-                        </p>
-                        <div className="h-1 w-1 bg-white/20 rounded-full hidden md:block" />
-                        <div className="flex items-center gap-4 text-[11px] font tracking-[0.2em] text-white/40">
-                            <button 
-                                onClick={() => setModalContent('terms')}
-                                className="hover:text-amber-500 transition-colors uppercase"
+                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <p className="text-[9px] tracking-[0.2em] text-white/20 uppercase font-medium">
+                        © {currentYear} FrameX-Tech Farm | All Rights Reserved
+                    </p>
+
+                    <div className="flex gap-3">
+                        {[
+                            { Icon: Linkedin, url: "https://www.linkedin.com/in/..." },
+                            { Icon: Instagram, url: "https://www.instagram.com/..." }
+                        ].map((social, index) => (
+                            <a 
+                                key={index}
+                                href={social.url} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-10 h-10 rounded-lg border border-white/5 flex items-center justify-center text-white/30 hover:text-orange-500 hover:border-orange-500/20 transition-all bg-white/[0.02]"
                             >
-                                Terms & Conditions
-                            </button>
-                            <div className="h-1 w-1 bg-white/20 rounded-full" />
-                            <button 
-                                onClick={() => setModalContent('privacy')}
-                                className="hover:text-amber-500 transition-colors uppercase"
-                            >
-                                Privacy Policy
-                            </button>
-                        </div>
+                                <social.Icon size={18} />
+                            </a>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            {/* LEGAL MODALS */}
+            {/* MODAL SYSTEM */}
             <AnimatePresence>
                 {modalContent && (
-                    <div className="fixed inset-0 z-[3000] flex items-center justify-center p-6">
+                    <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
                         <motion.div 
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setModalContent(null)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-md"
-                        />
-                        <motion.div 
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative z-10 w-full max-w-2xl max-h-[80vh] bg-[#0a0a0f] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-[#0a0a0f] border border-white/10 p-6 rounded-2xl max-w-md w-full relative"
                         >
-                            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
-                                <h3 className="text-xl font-bold tracking-tight uppercase">
-                                    {modalContent === 'terms' ? 'Terms & Conditions' : 'Privacy Policy'}
-                                </h3>
-                                <button onClick={() => setModalContent(null)} className="p-2 text-white/40 hover:text-white transition-colors">
-                                    <X size={20} />
-                                </button>
-                            </div>
-                            <div className="p-8 overflow-y-auto text-white/60 text-sm leading-relaxed space-y-6">
-                                {modalContent === 'terms' ? (
-                                    <>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">01. Acceptance of Terms</h4>
-                                            <p>By accessing and using FrameX-Tech Farm services, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please refrain from using our platform.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">02. Scope of Services</h4>
-                                            <p>We provide digital solutions including web development, UI/UX design, and mentorship programs. We reserve the right to modify or discontinue services at any time without prior notice.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">03. User Obligations</h4>
-                                            <p>Users must provide accurate information when applying for projects or mentorship. Any misuse of the platform or unauthorized access is strictly prohibited.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">04. Intellectual Property</h4>
-                                            <p>All content, designs, and code provided by FrameX are protected by intellectual property laws. Users may not reproduce or distribute materials without explicit consent.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">05. Limitation of Liability</h4>
-                                            <p>FrameX-Tech Farm is not liable for any indirect, incidental, or consequential damages arising from the use or inability to use our services.</p>
-                                        </section>
-                                    </>
-                                ) : (
-                                    <>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">01. Data Collection</h4>
-                                            <p>We collect personal information such as your name, email, and location only when you voluntarily submit it through our application or contact forms.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">02. Use of Information</h4>
-                                            <p>Your data is used solely for processing your applications, improving our services, and communicating relevant updates. We do not sell your personal information to third parties.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">03. Security Measures</h4>
-                                            <p>We implement industry-standard security protocols to protect your data from unauthorized access, alteration, or destruction. However, no digital transmission is 100% secure.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">04. Cookie Policy</h4>
-                                            <p>Our website may use cookies to enhance user experience and analyze traffic patterns. You can manage your cookie preferences through your browser settings.</p>
-                                        </section>
-                                        <section>
-                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">05. Policy Updates</h4>
-                                            <p>We reserve the right to update this Privacy Policy at any time. Changes will be posted on this page with an updated revision date.</p>
-                                        </section>
-                                    </>
-                                )}
+                            <button onClick={() => setModalContent(null)} className="absolute top-4 right-4 text-white/20 hover:text-white"><X size={20}/></button>
+                            <h3 className="text-lg font-bold mb-3 uppercase tracking-tighter text-orange-500">{modalContent}</h3>
+                            <div className="text-white/60 text-xs leading-relaxed max-h-[60vh] overflow-y-auto pr-2">
+                                [Content goes here...]
                             </div>
                         </motion.div>
                     </div>
