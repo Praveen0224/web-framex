@@ -9,6 +9,8 @@ import Portfolio from '../components/sections/Projects';
 import Reviews from '../components/sections/Reviews';
 import Footer from '../components/Footer';
 import StudentGuidance from '../components/sections/Student';
+import ApplicationForm from '../components/ApplicationForm';
+import { useState } from 'react';
 
 
 export default function Page() {
@@ -20,6 +22,14 @@ export default function Page() {
         reviews: useRef(null),
         contact: useRef(null)
     });
+
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [formConfig, setFormConfig] = useState({ type: 'call', category: 'general' });
+
+    const openForm = (type = 'call', category = 'general') => {
+        setFormConfig({ type, category });
+        setIsFormOpen(true);
+    };
 
     const scrollToSection = (section) => {
         const element = sections.current[section]?.current;
@@ -43,7 +53,7 @@ export default function Page() {
 
     return (
         <div className="app-container">
-            <Navbar onNavClick={handleNavClick} />
+            <Navbar onNavClick={handleNavClick} onApply={() => openForm('call', 'general')} />
 
             {/* All sections with refs */}
             <section ref={sections.current.home} id="home" className="page-section">
@@ -51,7 +61,7 @@ export default function Page() {
             </section>
 
             <section ref={sections.current.about} id="about" className="page-section">
-                <About />
+                <About onApply={() => openForm('build', 'collaboration')} />
             </section>
             <section ref={sections.current.guidance} id="guidance" className="page-section">
                 <StudentGuidance />
@@ -71,7 +81,14 @@ export default function Page() {
 
           
 
-            <Footer />
+            <Footer onApply={() => openForm('project', 'development')} />
+
+            <ApplicationForm 
+                isOpen={isFormOpen} 
+                onClose={() => setIsFormOpen(false)} 
+                type={formConfig.type} 
+                category={formConfig.category} 
+            />
         </div>
     );
 }

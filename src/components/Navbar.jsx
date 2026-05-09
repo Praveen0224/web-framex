@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Zap } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
-const Navbar = ({ onNavClick }) => {
+const Navbar = ({ onNavClick, onApply }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [activeTab, setActiveTab] = useState('home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -61,7 +61,7 @@ const Navbar = ({ onNavClick }) => {
                     <img 
                         src="/framexlogo.png" 
                         alt="Logo" 
-                        className="h-32 md:h-48 w-auto object-contain transition-transform active:scale-95" 
+                        className="h-40 md:h-56 w-auto object-contain transition-transform active:scale-95" 
                     />
                 </div>
 
@@ -87,7 +87,7 @@ const Navbar = ({ onNavClick }) => {
                     </div>
                     
                     <button
-                        onClick={() => handleLinkClick('contact')}
+                        onClick={onApply}
                         className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white font-bold text-[12px] rounded-lg shadow-lg shadow-orange-500/20"
                     >
                         Book a Call <Zap size={14} fill="currentColor" />
@@ -136,7 +136,7 @@ const Navbar = ({ onNavClick }) => {
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: 0.4 }}
-                                onClick={() => handleLinkClick('contact')}
+                                onClick={onApply}
                                 className="w-full mt-4 py-4 bg-orange-500 text-white font-bold rounded-xl text-lg flex items-center justify-center gap-2"
                             >
                                 Book a Call <Zap size={20} fill="currentColor" />

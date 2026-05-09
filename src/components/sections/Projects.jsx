@@ -49,7 +49,7 @@ const Card = ({ i, title, tagline, desc, image, color, progress, range, targetSc
                     backgroundColor: color,
                     top: `calc(2vh + ${i * 20}px)` 
                 }} 
-                className="relative h-[480px] md:h-[650px] w-full max-w-[1100px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl origin-top border border-white/5"
+                className="relative h-[480px] md:h-[650px] w-full max-w-[1100px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl origin-top"
             >
                 <div className="h-full w-full relative group">
                     <img 

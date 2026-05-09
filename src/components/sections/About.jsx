@@ -11,7 +11,7 @@ import {
   Briefcase
 } from 'lucide-react';
 
-const About = () => {
+const About = ({ onApply }) => {
   const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -118,7 +118,7 @@ const About = () => {
               <motion.div
                 key={i}
                 style={{ x: card.x, rotate: card.rotate, zIndex: 4 - i }}
-                className="absolute w-[300px] aspect-[3/4] rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#0a0a0a] shadow-2xl group"
+                className="absolute w-[300px] aspect-[3/4] rounded-[2.5rem] overflow-hidden  bg-[#0a0a0a] shadow-2xl group"
               >
                 <div className="relative h-3/5">
                   <img src={card.img} alt={card.title} className="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-all duration-700" />
@@ -170,6 +170,7 @@ const About = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={onApply}
             className="group px-8 py-4 bg-white text-black font-black rounded-full flex items-center gap-3 transition-all"
           >
             LET'S BUILD TOGETHER

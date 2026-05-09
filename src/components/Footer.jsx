@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Instagram, Linkedin, ArrowUpRight, Zap, Send } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Instagram, Linkedin, ArrowUpRight, Zap, Send, X } from 'lucide-react';
 
-const Footer = () => {
+const Footer = ({ onApply }) => {
     const currentYear = new Date().getFullYear();
+    const [modalContent, setModalContent] = useState(null); // 'terms' | 'privacy' | null
 
     const footerLinks = [
         {
@@ -91,7 +92,7 @@ const Footer = () => {
                         <motion.button 
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => window.location.href = '#contact'}
+                            onClick={onApply}
                             className="group relative px-12 py-4 bg-white text-black font-black rounded-full overflow-hidden mb-24 flex items-center gap-4 uppercase text-[12px] tracking-widest"
                         >
                             <span className="relative z-10">Start a project</span>
@@ -110,10 +111,20 @@ const Footer = () => {
                                     <ul className="space-y-4">
                                         {section.links.map((link) => (
                                             <li key={link.name}>
-                                                <a href={link.href} className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px]  tracking-widest  flex items-center gap-2 group">
-                                                    <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all underline-offset-4" />
-                                                    {link.name}
-                                                </a>
+                                                {link.name === 'PRIVACY' || link.name === 'TERMS' ? (
+                                                    <button 
+                                                        onClick={() => setModalContent(link.name === 'PRIVACY' ? 'privacy' : 'terms')}
+                                                        className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px] tracking-widest flex items-center gap-2 group"
+                                                    >
+                                                        <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all" />
+                                                        {link.name}
+                                                    </button>
+                                                ) : (
+                                                    <a href={link.href} className="text-white/50 hover:text-orange-500 transition-all duration-300 text-[11px] tracking-widest flex items-center gap-2 group">
+                                                        <span className="w-0 h-[1px] bg-orange-500 group-hover:w-3 transition-all" />
+                                                        {link.name}
+                                                    </a>
+                                                )}
                                             </li>
                                         ))}
                                     </ul>
@@ -131,15 +142,102 @@ const Footer = () => {
                         </p>
                         <div className="h-1 w-1 bg-white/20 rounded-full hidden md:block" />
                         <div className="flex items-center gap-4 text-[11px] font tracking-[0.2em] text-white/40">
-                            <a href="/terms" className="hover:text-amber-500 transition-colors uppercase">Terms & Conditions</a>
+                            <button 
+                                onClick={() => setModalContent('terms')}
+                                className="hover:text-amber-500 transition-colors uppercase"
+                            >
+                                Terms & Conditions
+                            </button>
                             <div className="h-1 w-1 bg-white/20 rounded-full" />
-                            <a href="/privacy" className="hover:text-amber-500 transition-colors uppercase">Privacy Policy</a>
+                            <button 
+                                onClick={() => setModalContent('privacy')}
+                                className="hover:text-amber-500 transition-colors uppercase"
+                            >
+                                Privacy Policy
+                            </button>
                         </div>
                     </div>
-                    
-                  
                 </div>
             </div>
+
+            {/* LEGAL MODALS */}
+            <AnimatePresence>
+                {modalContent && (
+                    <div className="fixed inset-0 z-[3000] flex items-center justify-center p-6">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setModalContent(null)}
+                            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                        />
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="relative z-10 w-full max-w-2xl max-h-[80vh] bg-[#0a0a0f] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
+                        >
+                            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+                                <h3 className="text-xl font-bold tracking-tight uppercase">
+                                    {modalContent === 'terms' ? 'Terms & Conditions' : 'Privacy Policy'}
+                                </h3>
+                                <button onClick={() => setModalContent(null)} className="p-2 text-white/40 hover:text-white transition-colors">
+                                    <X size={20} />
+                                </button>
+                            </div>
+                            <div className="p-8 overflow-y-auto text-white/60 text-sm leading-relaxed space-y-6">
+                                {modalContent === 'terms' ? (
+                                    <>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">01. Acceptance of Terms</h4>
+                                            <p>By accessing and using FrameX-Tech Farm services, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please refrain from using our platform.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">02. Scope of Services</h4>
+                                            <p>We provide digital solutions including web development, UI/UX design, and mentorship programs. We reserve the right to modify or discontinue services at any time without prior notice.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">03. User Obligations</h4>
+                                            <p>Users must provide accurate information when applying for projects or mentorship. Any misuse of the platform or unauthorized access is strictly prohibited.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">04. Intellectual Property</h4>
+                                            <p>All content, designs, and code provided by FrameX are protected by intellectual property laws. Users may not reproduce or distribute materials without explicit consent.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">05. Limitation of Liability</h4>
+                                            <p>FrameX-Tech Farm is not liable for any indirect, incidental, or consequential damages arising from the use or inability to use our services.</p>
+                                        </section>
+                                    </>
+                                ) : (
+                                    <>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">01. Data Collection</h4>
+                                            <p>We collect personal information such as your name, email, and location only when you voluntarily submit it through our application or contact forms.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">02. Use of Information</h4>
+                                            <p>Your data is used solely for processing your applications, improving our services, and communicating relevant updates. We do not sell your personal information to third parties.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">03. Security Measures</h4>
+                                            <p>We implement industry-standard security protocols to protect your data from unauthorized access, alteration, or destruction. However, no digital transmission is 100% secure.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">04. Cookie Policy</h4>
+                                            <p>Our website may use cookies to enhance user experience and analyze traffic patterns. You can manage your cookie preferences through your browser settings.</p>
+                                        </section>
+                                        <section>
+                                            <h4 className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest">05. Policy Updates</h4>
+                                            <p>We reserve the right to update this Privacy Policy at any time. Changes will be posted on this page with an updated revision date.</p>
+                                        </section>
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </footer>
     );
 };
