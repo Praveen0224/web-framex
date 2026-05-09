@@ -8,25 +8,26 @@ const projects = [
         title: 'Privielle', 
         tagline: 'Ecommerce Website', 
         desc: 'A premium digital storefront focused on high-end luxury aesthetics.',
-        image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200',
+        image: '/Project1.png',
         color: '#121212'
     },
     { 
         id: '02', 
-        title: 'R3k Shots', 
-        tagline: 'Studio Website', 
-        desc: 'Minimalist portfolio for a high-fidelity photography studio.',
-        image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200',
-        color: '#0d0d0d'
-    },
-    { 
-        id: '03', 
         title: 'SMR Holidays', 
         tagline: 'Tourism Website', 
         desc: 'Experience the beauty of Kodaikanal through a seamless travel interface.',
-        image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?q=80&w=1200',
+        image: '/Project2.png',
         color: '#111111'
     },
+  { 
+    id: '03', 
+    title: 'Zencrios', 
+    tagline: 'Company Logo', 
+    desc: 'Modern and professional logo branding design crafted for a strong and memorable business identity.',
+    image: '/Project3.png',
+    color: '#0d0d0d'
+},
+    
     { 
         id: '04', 
         title: 'Helios Engine', 
@@ -47,15 +48,16 @@ const Card = ({ i, title, tagline, desc, image, color, progress, range, targetSc
                 style={{ 
                     scale, 
                     backgroundColor: color,
-                    top: `calc(2vh + ${i * 20}px)` 
+                    top: `calc(2vh + ${i * 50}px)` 
                 }} 
-                className="relative h-[480px] md:h-[650px] w-full max-w-[1100px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl origin-top"
+                className="relative h-[480px] md:h-[650px] w-full max-w-[1100px] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden  origin-top"
             >
                 <div className="h-full w-full relative group">
                     <img 
                         src={image} 
                         alt={title} 
-                        className="object-cover w-full h-full opacity-40 group-hover:scale-105 transition-transform duration-1000"
+                        /* UPDATED OPACITY FROM 40 TO 80 */
+                        className="object-cover w-full h-full opacity-80 group-hover:scale-105 transition-transform duration-1000"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
                     
@@ -85,7 +87,6 @@ const Portfolio = () => {
 
     return (
         <main ref={container} className="bg-[#050505] relative">
-            {/* COMPACT CENTERED HEADING */}
             <section className="pt-24 pb-12 md:pt-32 md:pb-16 flex flex-col justify-center items-center px-6 text-center">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -106,7 +107,6 @@ const Portfolio = () => {
                 </motion.div>
             </section>
 
-            {/* STACKING CARDS - STARTING CLOSER TO HEADER */}
             <section className="px-2 md:px-10 mt-[-20px]">
                 {projects.map((project, i) => {
                     const targetScale = 1 - ((projects.length - i) * 0.05);
