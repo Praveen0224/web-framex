@@ -59,7 +59,7 @@ const Navbar = ({ onNavClick, onApply }) => {
                     onClick={() => handleLinkClick('home')}
                 >
                     <img 
-                        src="/framexlogo.png" 
+                        src="/framexlogo.webp" 
                         alt="Logo" 
                         className="h-40 md:h-56 w-auto object-contain transition-transform active:scale-95" 
                     />
