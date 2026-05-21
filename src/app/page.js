@@ -10,6 +10,7 @@ import Reviews from '../components/sections/Reviews';
 import Footer from '../components/Footer';
 import StudentGuidance from '../components/sections/Student';
 import ApplicationForm from '../components/ApplicationForm';
+import FAQ from '../components/sections/FAQ';
 import { useState } from 'react';
 
 
@@ -79,7 +80,9 @@ export default function Page() {
                 <Reviews />
             </section>
 
-          
+            <section id="faq" className="page-section">
+                <FAQ />
+            </section>
 
             <Footer onApply={() => openForm('project', 'development')} />
 

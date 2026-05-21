@@ -1,6 +1,6 @@
 'use client';
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useInView, animate } from 'framer-motion';
 import {
   ArrowRight,
   Layout,
@@ -10,6 +10,26 @@ import {
   Users,
   Briefcase
 } from 'lucide-react';
+
+// Separate Animated Counter Component for clean performance
+const AnimatedCounter = ({ to, suffix = "" }) => {
+  const ref = useRef(null);
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest) + suffix);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(motionValue, to, {
+        duration: 2,
+        ease: [0.16, 1, 0.3, 1],
+      });
+      return controls.stop;
+    }
+  }, [isInView, to, motionValue]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+};
 
 const About = ({ onApply }) => {
   const containerRef = useRef(null);
@@ -25,9 +45,11 @@ const About = ({ onApply }) => {
     restDelta: 0.001
   });
 
-  // Desktop horizontal fan-out animations
-  const card1X = useTransform(smoothProgress, [0.2, 0.5], [0, -380]);
-  const card4X = useTransform(smoothProgress, [0.2, 0.5], [0, 380]);
+  // Desktop horizontal fan-out animations - Significantly expanded spacing for clean separation
+  const card1X = useTransform(smoothProgress, [0.2, 0.5], [0, -420]);
+  const card2X = useTransform(smoothProgress, [0.2, 0.5], [0, -140]);
+  const card3X = useTransform(smoothProgress, [0.2, 0.5], [0, 140]);
+  const card4X = useTransform(smoothProgress, [0.2, 0.5], [0, 420]);
 
   const keyCards = [
     {
@@ -43,7 +65,7 @@ const About = ({ onApply }) => {
       desc: "We help businesses grow digitally through websites, branding, UI/UX, and scalable platforms.",
       icon: <Layout size={22} />,
       img: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=500",
-      x: useTransform(smoothProgress, [0.2, 0.5], [0, -120]),
+      x: card2X,
       rotate: -4
     },
     {
@@ -51,7 +73,7 @@ const About = ({ onApply }) => {
       desc: "Collaborate with our team to build impactful products and launch meaningful ideas together.",
       icon: <Briefcase size={22} />,
       img: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=500",
-      x: useTransform(smoothProgress, [0.2, 0.5], [0, 120]),
+      x: card3X,
       rotate: 4
     },
     {
@@ -110,24 +132,24 @@ const About = ({ onApply }) => {
         </div>
 
         {/* CARDS SECTION */}
-        <div className="relative w-full max-w-6xl overflow-x-hidden">
+        <div className="relative w-full max-w-7xl overflow-x-hidden">
           
-          {/* Desktop View (Horizontal Spread) */}
-          <div className="hidden md:flex relative h-[550px] justify-center items-center">
+          {/* Desktop View (Horizontal Spread) - Updated with higher separation offsets */}
+          <div className="hidden md:flex relative h-[520px] justify-center items-center">
             {keyCards.map((card, i) => (
               <motion.div
                 key={i}
                 style={{ x: card.x, rotate: card.rotate, zIndex: 4 - i }}
-                className="absolute w-[300px] aspect-[3/4] rounded-[2.5rem] overflow-hidden  bg-[#0a0a0a] shadow-2xl group"
+                className="absolute w-[260px] aspect-[3/4] rounded-[2.5rem] overflow-hidden bg-[#0a0a0a] shadow-2xl group border border-white/5"
               >
                 <div className="relative h-3/5">
                   <img src={card.img} alt={card.title} className="w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-all duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a]" />
                 </div>
-                <div className="p-8 h-2/5 flex flex-col justify-center">
+                <div className="p-6 h-2/5 flex flex-col justify-center">
                   <div className="text-orange-500 mb-2">{card.icon}</div>
-                  <h3 className="text-2xl font-bold text-white">{card.title}</h3>
-                  <p className="text-white/45 text-sm mt-2">{card.desc}</p>
+                  <h3 className="text-xl font-bold text-white">{card.title}</h3>
+                  <p className="text-white/45 text-xs mt-2 leading-relaxed">{card.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -140,13 +162,12 @@ const About = ({ onApply }) => {
               return (
                 <motion.div
                   key={i}
-                  // Zigzag logic: Even starts left (-50), Odd starts right (50)
                   initial={{ opacity: 0, x: isEven ? -50 : 50, y: 20 }}
                   whileInView={{ opacity: 1, x: 0, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ 
                     duration: 0.8, 
-                    ease: [0.16, 1, 0.3, 1] // Custom spring-like cubic bezier
+                    ease: [0.16, 1, 0.3, 1] 
                   }}
                   className="w-full rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#0a0a0a]"
                 >
@@ -165,8 +186,41 @@ const About = ({ onApply }) => {
           </div>
         </div>
 
+        {/* METRICS COUNTING SECTION */}
+        <div className="w-full max-w-4xl mt-20 md:mt-24 px-4">
+          <div className="grid grid-cols-2 gap-8 md:gap-16 border-t border-white/10 pt-16 text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 tracking-tight mb-2">
+                <AnimatedCounter to={10} suffix="+" />
+              </div>
+              <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/50">
+                Projects Completed
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 tracking-tight mb-2">
+                <AnimatedCounter to={20} suffix="+" />
+              </div>
+              <div className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/50">
+                Students Mentored
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
         {/* CTA */}
-        <motion.div className="mt-20 md:mt-28">
+        <motion.div className="mt-20 md:mt-24">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
