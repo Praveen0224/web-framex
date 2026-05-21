@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { motion, useSpring, useTransform } from 'framer-motion'
+import { motion, useSpring, AnimatePresence } from 'framer-motion'
 
 // Array of diverse tech/design images
 const images = [
@@ -22,7 +22,6 @@ const ImageColumn = ({ reverse = false, speed = 40 }) => (
         >
             {[...images, ...images, ...images].map((img, i) => (
                 <div key={i} className="w-full aspect-square bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden border border-white/10 shadow-inner">
-                    {/* Changed opacity from 40 to 80 and removed grayscale */}
                     <img src={img} alt="work" className="w-full h-full object-cover opacity-80" />
                 </div>
             ))}
@@ -32,9 +31,38 @@ const ImageColumn = ({ reverse = false, speed = 40 }) => (
 
 const Home = () => {
     const [isLoaded, setIsLoaded] = useState(false);
+    // Heading rotation state
+    const [headingIndex, setHeadingIndex] = useState(0);
+
+    // Dynamic variation sets for your premium technical ecosystem
+    const headings = [
+        {
+            prefix: "The ",
+            highlight: "next-gen",
+            suffix: "freelance tech partner"
+        },
+        {
+            prefix: "Crafting ",
+            highlight: "high-end",
+            suffix: "interactive user interfaces"
+        },
+        {
+            prefix: "Building ",
+            highlight: "scalable",
+            suffix: "full-stack architectures"
+        }
+    ];
 
     useEffect(() => {
         setIsLoaded(true);
+    }, []);
+
+    // Interval handler to cycle through the 3 headings smoothly every 4 seconds
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setHeadingIndex((prev) => (prev + 1) % headings.length);
+        }, 4000);
+        return () => clearInterval(timer);
     }, []);
 
     const springConfig = { stiffness: 45, damping: 25 };
@@ -54,7 +82,6 @@ const Home = () => {
         <div className="relative min-h-screen w-full bg-[#020202] font-sans text-white overflow-hidden flex flex-col items-center justify-center">
             
             {/* 1. DENSE 5-COLUMN BACKGROUND - FULLY RESPONSIVE */}
-            {/* Increased container opacity from 0.18 to 0.4 for better visibility */}
             <div className="absolute inset-0 z-0 flex justify-center gap-2 md:gap-4 px-2 opacity-[0.4] pointer-events-none">
                 <ImageColumn speed={55} />
                 <ImageColumn reverse speed={48} />
@@ -79,14 +106,26 @@ const Home = () => {
                 transition={{ duration: 1, ease: "easeOut" }}
                 className="relative z-20 flex flex-col items-center w-full max-w-7xl px-4 md:px-6 text-center pt-10"
             >
-              <h1 className="text-[2.5rem] md:text-7xl lg:text-[7.5rem] font-light tracking-tighter leading-[1] mb-6 md:mb-8">
-    The{" "}
-    <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500">
-        next-gen
-    </span>
-    <br />
-    freelance tech partner
-</h1>
+                {/* Fixed container box prevents layout shift during fade transitions */}
+                <div className="h-[5rem] md:h-[15rem] lg:h-[23rem] flex items-center justify-center mb-6 md:mb-8 overflow-hidden">
+                    <AnimatePresence mode="wait">
+                        <motion.h1 
+                            key={headingIndex}
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                            className="text-[2.5rem] md:text-7xl lg:text-[7.5rem] font-light tracking-tighter leading-[1]"
+                        >
+                            {headings[headingIndex].prefix}
+                            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500">
+                                {headings[headingIndex].highlight}
+                            </span>
+                            <br />
+                            {headings[headingIndex].suffix}
+                        </motion.h1>
+                    </AnimatePresence>
+                </div>
 
                 <p className="text-white/60 text-xs md:text-lg font-light max-w-xl md:max-w-2xl leading-relaxed mb-10 md:mb-14 tracking-wide px-4">
                     Helping brands build high-performance digital products with 
@@ -102,8 +141,6 @@ const Home = () => {
                         Our Work
                     </button>
                 </div>
-
-                
             </motion.main>
 
             <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-50" />
