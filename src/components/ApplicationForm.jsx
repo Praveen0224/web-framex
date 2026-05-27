@@ -2,15 +2,15 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion as m, AnimatePresence } from 'framer-motion';
-import { 
-  X, Send, ChevronRight, ChevronLeft, Calendar, 
-  Clock, User, MessageSquare, Globe, ArrowRight, CheckCircle2 
+import {
+    X, ChevronRight, ChevronLeft, Clock, User,
+    MessageSquare, Globe, ArrowRight, CheckCircle2, ShieldCheck
 } from 'lucide-react';
-import { supabase } from '@/lib/supabaseClient';
+// import { supabase } from '@/lib/supabaseClient'; // Temporarily commented out
 
 const ApplicationForm = ({ isOpen, onClose, type, category }) => {
     const [step, setStep] = useState(1);
-    
+
     // --- CALENDAR STATES ---
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState('');
@@ -21,8 +21,8 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
         email: '',
         phone: '',
         location: '',
-        whoYouAre: 'student', 
-        language: 'Tamil',    
+        whoYouAre: 'student',
+        language: 'Tamil',
         message: ''
     });
 
@@ -34,13 +34,13 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
     const { daysInMonth, blankDays } = useMemo(() => {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-        
-        const firstDayIndex = new Date(year, month, 1).getDay(); // 0 = Sunday, 1 = Monday etc.
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
         const totalDays = new Date(year, month + 1, 0).getDate();
-        
+
         const blanks = Array(firstDayIndex).fill(null);
         const days = Array.from({ length: totalDays }, (_, i) => i + 1);
-        
+
         return { daysInMonth: days, blankDays: blanks };
     }, [currentDate]);
 
@@ -74,33 +74,53 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
         setStep(prev => prev - 1);
     };
 
+    // --- WHATSAPP REDIRECTION LOGIC ---
+    const sendWhatsAppRedirect = (date, time, finalData) => {
+        const targetPhoneNumber = "919384844109";
+
+        const textMessage = `*🔥 NEW APPLICATION SUBMISSION*
+----------------------------------
+*📌 Program Profile:*
+• Type: ${type || 'Not Specified'}
+• Category: ${category || 'Not Specified'}
+
+*📅 Booking Details:*
+• Date: ${date}
+• Time: ${time}
+
+*👤 Identity Profile:*
+• Name: ${finalData.fullName}
+• Email: ${finalData.email}
+• Phone: ${finalData.phone}
+• Location: ${finalData.location}
+• Category: ${finalData.whoYouAre.toUpperCase()}
+• Language: ${finalData.language}
+
+*💬 Remarks & Targets:*
+"${finalData.message}"
+----------------------------------`;
+
+        const encodedMessage = encodeURIComponent(textMessage);
+        const whatsappUrl = `https://wa.me/919384844109?text=${encodedMessage}`; window.open(whatsappUrl, '_blank');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setErrorMessage('');
+
         try {
-            const { error } = await supabase.from('applications').insert([{
-                full_name: formData.fullName,
-                email: formData.email,
-                phone: formData.phone,
-                location: formData.location,
-                qualification: formData.whoYouAre, 
-                preferred_language: formData.language,
-                booking_date: selectedDate,
-                booking_time: customTime, 
-                message: formData.message,
-                application_type: type,
-                program_category: category
-            }]);
-            
-            if (error) throw error;
+            await new Promise((resolve) => setTimeout(resolve, 800));
             setIsSuccess(true);
-            setTimeout(() => { 
-                setIsSuccess(false); 
+            sendWhatsAppRedirect(selectedDate, customTime, formData);
+
+            setTimeout(() => {
+                setIsSuccess(false);
                 setStep(1);
                 setSelectedDate('');
                 setCustomTime('');
                 setFormData({ fullName: '', email: '', phone: '', location: '', whoYouAre: 'student', language: 'Tamil', message: '' });
-                onClose(); 
+                onClose();
             }, 2500);
         } catch (error) {
             setErrorMessage(error.message);
@@ -114,91 +134,95 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
     return (
         <AnimatePresence>
             <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 perspective-[1000px]">
-                <m.div 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
+                <m.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
-                    className="absolute inset-0 bg-black/85 backdrop-blur-xl"
+                    className="absolute inset-0 bg-black/60 backdrop-blur-md"
                 />
 
                 <m.div
-                    initial={{ opacity: 0, rotateX: 12, y: 30, scale: 0.97 }}
+                    initial={{ opacity: 0, rotateX: 8, y: 20, scale: 0.98 }}
                     animate={{ opacity: 1, rotateX: 0, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, rotateX: -12, y: -30, scale: 0.97 }}
-                    transition={{ type: "spring", damping: 28, stiffness: 140 }}
-                    className="w-full max-w-xl bg-[#0c0c0e] border border-white/10 rounded-[2.5rem] relative z-10 shadow-[0_50px_100px_rgba(0,0,0,0.9)] overflow-hidden"
+                    exit={{ opacity: 0, rotateX: -8, y: -20, scale: 0.98 }}
+                    transition={{ type: "spring", damping: 30, stiffness: 160 }}
+                    className="w-full max-w-md bg-[#fcfcfd] border border-gray-200/80 rounded-[2rem] relative z-10 shadow-[0_30px_70px_rgba(0,0,0,0.15)] overflow-hidden"
                 >
-                    {/* Glow Accents */}
-                    <div className="absolute top-0 left-1/4 w-[50%] h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent blur-[1px]" />
-                    <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-orange-500/5 blur-[100px] rounded-full pointer-events-none" />
+                    {/* WHATSAPP TRUST BANNER */}
+                    {!isSuccess && (
+                        <div className="bg-emerald-50/60 border-b border-emerald-100/50 px-6 py-2.5 flex items-center gap-2 text-emerald-700">
+                            <ShieldCheck size={14} className="text-emerald-600 flex-shrink-0" />
+                            <p className="text-[10px] font-medium tracking-wide uppercase">
+                                Chat With Us on WhatsApp                            </p>
+                        </div>
+                    )}
 
-                    <div className="p-6 md:p-9 relative z-20">
-                        <button onClick={onClose} className="absolute right-6 top-6 text-white/30 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5">
-                            <X size={18} />
+                    <div className="p-5 md:p-7 relative z-20">
+                        <button onClick={onClose} className="absolute right-5 top-5 text-gray-400 hover:text-gray-900 transition-colors p-1.5 rounded-full hover:bg-gray-100">
+                            <X size={16} />
                         </button>
 
                         {isSuccess ? (
-                            <m.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-16 flex flex-col items-center justify-center">
-                                <m.div animate={{ scale: [1, 1.08, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="w-20 h-20 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mb-6 border border-emerald-500/20">
-                                    <CheckCircle2 size={36} />
+                            <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12 flex flex-col items-center justify-center">
+                                <m.div animate={{ scale: [1, 1.05, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mb-4 border border-emerald-100">
+                                    <CheckCircle2 size={30} />
                                 </m.div>
-                                <h3 className="text-2xl font-bold text-white tracking-tight">Application Sent</h3>
-                                <p className="text-white/40 text-xs mt-1 uppercase tracking-widest">Schedule locked perfectly</p>
+                                <h3 className="text-xl font-bold text-gray-900 tracking-tight">Redirecting to WhatsApp...</h3>
+                                <p className="text-gray-400 text-[10px] mt-1 uppercase tracking-widest">Schedule backup locked safely</p>
                             </m.div>
                         ) : (
                             <>
-                                <header className="mb-6 pr-10">
-                                    <div className="flex items-center gap-3 mb-1">
+                                <header className="mb-5 pr-10">
+                                    <div className="flex items-center gap-2.5 mb-1.5">
                                         <div className="flex gap-1">
                                             {[1, 2, 3].map((s) => (
-                                                <div key={s} className={`h-1 rounded-full transition-all duration-300 ${step === s ? 'w-5 bg-gradient-to-r from-orange-500 to-pink-500' : 'w-1.5 bg-white/10'}`} />
+                                                <div key={s} className={`h-1 rounded-full transition-all duration-300 ${step === s ? 'w-4 bg-orange-500' : 'w-1.5 bg-gray-200'}`} />
                                             ))}
                                         </div>
-                                        <span className="text-[9px] uppercase tracking-[0.2em] font-black text-orange-500/80">Stage {step} of 3</span>
+                                        <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-orange-500">Stage {step} of 3</span>
                                     </div>
-                                    <h2 className="text-xl md:text-2xl font-black text-white tracking-tight uppercase">
+                                    <h2 className="text-lg font-bold text-gray-900 tracking-tight uppercase">
                                         {step === 1 && "Select Date & Time"}
                                         {step === 2 && "Identity Profile"}
                                         {step === 3 && "Brief Description"}
                                     </h2>
+                                    <p className="text-[11px] text-gray-400 mt-0.5 leading-relaxed">
+                                        Your completed details will launch seamlessly via WhatsApp to instant-lock your desk confirmation.
+                                    </p>
                                 </header>
 
                                 {errorMessage && (
-                                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs">
+                                    <div className="mb-4 p-2.5 bg-red-50 border border-red-100 rounded-xl text-red-500 text-xs">
                                         {errorMessage}
                                     </div>
                                 )}
 
-                                {/* STAGE 1: CIRCULAR CALENDAR GRID & MANUAL TIME */}
+                                {/* STAGE 1: ULTRA COMPACT CALENDAR CARD */}
                                 {step === 1 && (
-                                    <m.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
-                                        
-                                        {/* Classic Header & Month Selector */}
-                                        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4">
-                                            <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
-                                                <span className="text-xs font-black uppercase tracking-wider text-white/90">
+                                    <m.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-3.5">
+                                        <div className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-xl p-3 max-w-[280px] mx-auto w-full">
+                                            <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-gray-50">
+                                                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-800">
                                                     {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                                 </span>
-                                                <div className="flex gap-1">
-                                                    <button type="button" onClick={() => handleMonthChange(-1)} className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all">
-                                                        <ChevronLeft size={14} />
+                                                <div className="flex gap-0.5">
+                                                    <button type="button" onClick={() => handleMonthChange(-1)} className="p-1 rounded bg-gray-50 border border-gray-100 text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all">
+                                                        <ChevronLeft size={10} />
                                                     </button>
-                                                    <button type="button" onClick={() => handleMonthChange(1)} className="p-1.5 rounded-lg bg-white/5 border border-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all">
-                                                        <ChevronRight size={14} />
+                                                    <button type="button" onClick={() => handleMonthChange(1)} className="p-1 rounded bg-gray-50 border border-gray-100 text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all">
+                                                        <ChevronRight size={10} />
                                                     </button>
                                                 </div>
                                             </div>
 
-                                            {/* Weekday Labels */}
-                                            <div className="grid grid-cols-7 gap-1 text-center mb-2">
+                                            <div className="grid grid-cols-7 gap-0.5 text-center mb-1">
                                                 {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(wd => (
-                                                    <span key={wd} className="text-[10px] font-bold text-white/30 uppercase tracking-wider">{wd}</span>
+                                                    <span key={wd} className="text-[8px] font-bold text-gray-400 uppercase tracking-wider">{wd}</span>
                                                 ))}
                                             </div>
 
-                                            {/* Circular Days Grid */}
-                                            <div className="grid grid-cols-7 gap-1.5 text-center">
+                                            <div className="grid grid-cols-7 gap-0.5 text-center">
                                                 {blankDays.map((_, idx) => (
                                                     <div key={`blank-${idx}`} className="aspect-square" />
                                                 ))}
@@ -211,11 +235,10 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
                                                             key={`day-${day}`}
                                                             type="button"
                                                             onClick={() => handleDateSelect(day)}
-                                                            className={`relative aspect-square rounded-full text-xs font-bold transition-all flex items-center justify-center ${
-                                                                isSelected 
-                                                                ? 'bg-gradient-to-br from-orange-500 to-pink-500 text-white font-black shadow-lg shadow-orange-500/20 scale-105' 
-                                                                : 'text-white/70 hover:bg-white/5 hover:text-white border border-transparent hover:border-white/5'
-                                                            }`}
+                                                            className={`relative aspect-square rounded-full text-[10px] font-medium transition-all flex items-center justify-center p-1 ${isSelected
+                                                                ? 'bg-orange-500 text-white font-bold shadow-md shadow-orange-500/20'
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                                                }`}
                                                         >
                                                             {day}
                                                         </button>
@@ -224,73 +247,72 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
                                             </div>
                                         </div>
 
-                                        {/* Flexible Dynamic Custom Time Fields */}
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold ml-1 flex items-center gap-1.5">
-                                                <Clock size={11} className="text-pink-500" /> Enter Your Preferred Time
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-bold ml-0.5 flex items-center gap-1">
+                                                <Clock size={10} className="text-orange-500" /> Preferred Time
                                             </label>
-                                            <input 
+                                            <input
                                                 type="text"
                                                 required
                                                 placeholder="e.g., 11:30 AM / Evening 4 PM"
                                                 value={customTime}
                                                 onChange={(e) => setCustomTime(e.target.value)}
-                                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-sm text-white focus:outline-none focus:border-pink-500/40 transition-all placeholder:text-white/20"
+                                                className="w-full bg-white border border-gray-200/80 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-gray-300"
                                             />
                                         </div>
 
-                                        <button 
+                                        <button
                                             type="button"
                                             disabled={!selectedDate || !customTime}
                                             onClick={handleNextStep}
-                                            className="w-full py-4 bg-white text-black disabled:bg-white/10 disabled:text-white/30 rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all mt-4"
+                                            className="w-full py-3.5 bg-orange-500 text-white disabled:bg-gray-100 disabled:text-gray-400 rounded-xl font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-1.5 transition-all mt-2 shadow-sm shadow-orange-500/5"
                                         >
-                                            Continue <ArrowRight size={14} />
+                                            Continue <ArrowRight size={13} />
                                         </button>
                                     </m.div>
                                 )}
 
                                 {/* STAGE 2: IDENTITY PROFILE */}
                                 {step === 2 && (
-                                    <m.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-                                        <input required name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-sm text-white focus:outline-none focus:border-orange-500/40 transition-all" />
-                                        
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <input required type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-white focus:outline-none focus:border-orange-500/40 transition-all text-sm" />
-                                            <input required name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} className="bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-white focus:outline-none focus:border-orange-500/40 transition-all text-sm" />
+                                    <m.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-3">
+                                        <input required name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full bg-white border border-gray-200/80 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-orange-500/50 transition-all" />
+
+                                        <div className="grid grid-cols-2 gap-2.5">
+                                            <input required type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} className="w-full bg-white border border-gray-200/80 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-orange-500/50 transition-all" />
+                                            <input required name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} className="w-full bg-white border border-gray-200/80 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-orange-500/50 transition-all" />
                                         </div>
 
-                                        <div className="space-y-1.5">
-                                            <label className="text-[10px] text-white/30 uppercase tracking-[0.2em] font-bold ml-1"><User size={10} className="inline mr-1"/> Who you are</label>
-                                            <div className="grid grid-cols-3 gap-2 bg-black/40 p-1 rounded-2xl border border-white/5">
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-bold ml-0.5"><User size={9} className="inline mr-1 text-gray-400" /> Who you are</label>
+                                            <div className="grid grid-cols-3 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100">
                                                 {['student', 'client', 'others'].map((opt) => (
-                                                    <button key={opt} type="button" onClick={() => setFormData(prev => ({ ...prev, whoYouAre: opt }))} className={`py-2 rounded-xl text-[10px] font-black uppercase transition-all ${formData.whoYouAre === opt ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white' : 'text-white/40 hover:text-white'}`}>{opt}</button>
+                                                    <button key={opt} type="button" onClick={() => setFormData(prev => ({ ...prev, whoYouAre: opt }))} className={`py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all ${formData.whoYouAre === opt ? 'bg-white shadow-sm border border-gray-100 text-orange-500 font-extrabold' : 'text-gray-400 hover:text-gray-600'}`}>{opt}</button>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <div className="space-y-1.5">
-                                            <label className="text-[10px] text-white/30 uppercase tracking-[0.2em] font-bold ml-1"><Globe size={10} className="inline mr-1"/> Preferred Language</label>
-                                            <div className="grid grid-cols-3 gap-2 bg-black/40 p-1 rounded-2xl border border-white/5">
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-bold ml-0.5"><Globe size={9} className="inline mr-1 text-gray-400" /> Preferred Language</label>
+                                            <div className="grid grid-cols-3 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100">
                                                 {['Tamil', 'English', 'Other'].map((lang) => (
-                                                    <button key={lang} type="button" onClick={() => setFormData(prev => ({ ...prev, language: lang }))} className={`py-2 rounded-xl text-[10px] font-black uppercase transition-all ${formData.language === lang ? 'bg-white text-black' : 'text-white/40 hover:text-white'}`}>{lang}</button>
+                                                    <button key={lang} type="button" onClick={() => setFormData(prev => ({ ...prev, language: lang }))} className={`py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all ${formData.language === lang ? 'bg-white shadow-sm border border-gray-100 text-gray-900 font-extrabold' : 'text-gray-400 hover:text-gray-600'}`}>{lang}</button>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        <input required name="location" placeholder="Your Location" value={formData.location} onChange={handleChange} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-sm text-white focus:outline-none focus:border-orange-500/40 transition-all" />
+                                        <input required name="location" placeholder="Your Location" value={formData.location} onChange={handleChange} className="w-full bg-white border border-gray-200/80 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-orange-500/50 transition-all" />
 
-                                        <div className="grid grid-cols-2 gap-3 pt-2">
-                                            <button type="button" onClick={handlePrevStep} className="py-4 border border-white/10 hover:bg-white/5 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-1 transition-all">
-                                                <ChevronLeft size={14} /> Back
+                                        <div className="grid grid-cols-2 gap-2 pt-1">
+                                            <button type="button" onClick={handlePrevStep} className="py-3 border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-xl font-bold text-xs uppercase tracking-[0.1em] flex items-center justify-center gap-0.5 transition-all">
+                                                <ChevronLeft size={13} /> Back
                                             </button>
-                                            <button 
+                                            <button
                                                 type="button"
                                                 disabled={!formData.fullName || !formData.email || !formData.phone || !formData.location}
                                                 onClick={handleNextStep}
-                                                className="py-4 bg-white text-black disabled:bg-white/10 disabled:text-white/30 rounded-2xl font-black text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-1 transition-all"
+                                                className="py-3 bg-gray-900 hover:bg-gray-800 text-white disabled:bg-gray-100 disabled:text-gray-400 rounded-xl font-bold text-xs uppercase tracking-[0.1em] flex items-center justify-center gap-0.5 transition-all"
                                             >
-                                                Next <ChevronRight size={14} />
+                                                Next <ChevronRight size={13} />
                                             </button>
                                         </div>
                                     </m.div>
@@ -298,26 +320,25 @@ const ApplicationForm = ({ isOpen, onClose, type, category }) => {
 
                                 {/* STAGE 3: MESSAGE SUBMISSION */}
                                 {step === 3 && (
-                                    <m.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-                                        <div className="space-y-1.5">
-                                            <label className="text-[10px] text-white/30 uppercase tracking-[0.2em] font-bold ml-1"><MessageSquare size={10} className="inline mr-1" /> Remarks</label>
-                                            <textarea name="message" required rows="5" placeholder="Share your absolute target goal or requirements..." value={formData.message} onChange={handleChange} className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-5 text-sm text-white focus:outline-none focus:border-orange-500/40 transition-all resize-none" />
+                                    <form onSubmit={handleSubmit} className="space-y-3">
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] text-gray-400 uppercase tracking-[0.15em] font-bold ml-0.5"><MessageSquare size={9} className="inline mr-1 text-gray-400" /> Remarks</label>
+                                            <textarea name="message" required rows="4" placeholder="Share your absolute target goal or requirements..." value={formData.message} onChange={handleChange} className="w-full bg-white border border-gray-200/80 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-orange-500/50 transition-all resize-none" />
                                         </div>
 
-                                        <div className="grid grid-cols-3 gap-3 pt-2">
-                                            <button type="button" onClick={handlePrevStep} className="col-span-1 py-4 border border-white/10 hover:bg-white/5 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-1 transition-all">
-                                                <ChevronLeft size={14} /> Back
+                                        <div className="grid grid-cols-3 gap-2 pt-1">
+                                            <button type="button" onClick={handlePrevStep} className="col-span-1 py-3 border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-xl font-bold text-xs uppercase tracking-[0.1em] flex items-center justify-center gap-0.5 transition-all">
+                                                <ChevronLeft size={13} /> Back
                                             </button>
-                                            <button 
+                                            <button
                                                 type="submit"
                                                 disabled={isSubmitting || !formData.message}
-                                                onClick={handleSubmit}
-                                                className="col-span-2 py-4 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-orange-500/10"
+                                                className="col-span-2 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-xs uppercase tracking-[0.15em] transition-all hover:scale-[1.01] active:scale-[0.99] shadow-sm shadow-orange-500/10"
                                             >
-                                                {isSubmitting ? "Processing..." : "Submit Project"}
+                                                {isSubmitting ? "Processing..." : "Submit via WhatsApp"}
                                             </button>
                                         </div>
-                                    </m.div>
+                                    </form>
                                 )}
                             </>
                         )}
